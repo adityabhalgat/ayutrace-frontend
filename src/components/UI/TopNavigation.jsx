@@ -1,5 +1,5 @@
 import React from 'react';
-import { LeafIcon, SearchIcon, UserIcon } from '../UI/Icons';
+import { SearchIcon, UserIcon } from '../UI/Icons';
 
 const TopNavigation = ({ handleProfileClick, handleLogout }) => {
     return (
@@ -8,7 +8,11 @@ const TopNavigation = ({ handleProfileClick, handleLogout }) => {
                 <div className="flex justify-between items-center h-full px-3 sm:px-4">
                     <div className="flex px-1 sm:px-2 lg:px-0">
                         <div className="flex items-center">
-                            <LeafIcon className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600" />
+                            <img 
+                                src="/Logo (1).png" 
+                                alt="AyuTrace Logo" 
+                                className="h-8 w-8 sm:h-12 sm:w-12 object-contain"
+                            />
                             <span className="ml-2 text-lg sm:text-xl font-semibold text-gray-900">AyuTrace</span>
                         </div>
                     </div>

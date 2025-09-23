@@ -309,7 +309,7 @@ const OrganizationManagementSection = () => {
 
             {/* Create Organization Modal */}
             {showCreateForm && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center z-50">
                     <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Create New Organization</h3>
                         <div className="space-y-4">

@@ -17,42 +17,54 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        checkAuthStatus();
+        let isComponentMounted = true;
+        
+        const checkAuth = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    if (isComponentMounted) {
+                        setLoading(false);
+                    }
+                    return;
+                }
+
+                const response = await getProfile();
+                if (response.success && isComponentMounted) {
+                    setUser(response.data);
+                } else if (isComponentMounted) {
+                    // Invalid token, remove it
+                    localStorage.removeItem('token');
+                    setError('Authentication failed');
+                }
+            } catch (err) {
+                console.error('Auth check failed:', err);
+                if (isComponentMounted) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('userRole');
+                    setError('Authentication failed');
+                }
+            } finally {
+                if (isComponentMounted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        checkAuth();
+        
+        return () => {
+            isComponentMounted = false;
+        };
     }, []);
-
-    const checkAuthStatus = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                setLoading(false);
-                return;
-            }
-
-            const response = await getProfile();
-            if (response.success) {
-                setUser(response.data);
-            } else {
-                // Invalid token, remove it
-                localStorage.removeItem('token');
-                setError('Authentication failed');
-            }
-        } catch (err) {
-            console.error('Auth check failed:', err);
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('userRole');
-            setError('Authentication failed');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('userRole');
         setUser(null);
-        window.location.href = '/login';
+        window.location.href = '/';
     };
 
     const login = (userData, token) => {
@@ -65,6 +77,29 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
     };
 
+    const refreshUser = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                return;
+            }
+
+            const response = await getProfile();
+            if (response.success) {
+                setUser(response.data);
+            } else {
+                localStorage.removeItem('token');
+                setError('Authentication failed');
+            }
+        } catch (err) {
+            console.error('Auth refresh failed:', err);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('userRole');
+            setError('Authentication failed');
+        }
+    };
+
     const value = {
         user,
         loading,
@@ -72,7 +107,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: !!user,
         login,
         logout,
-        refreshUser: checkAuthStatus
+        refreshUser
     };
 
     return (

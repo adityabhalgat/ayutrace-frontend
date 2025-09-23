@@ -30,6 +30,10 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [orgLoading, setOrgLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationError, setLocationError] = useState('');
+  const [locationRequired, setLocationRequired] = useState(true);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
   // Fetch organizationId when role changes
   useEffect(() => {
     async function fetchOrgId() {
@@ -48,18 +52,118 @@ export default function SignUpPage() {
     if (role) fetchOrgId();
   }, [role]);
 
+  // Auto-request location when component mounts
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
   const handleLoginClick = () => {
     navigate('/login');
   };
 
   const handleLandingClick = () => {
     navigate('/');
-  }
+  };
 
-  const handleSignup = async (e) => {
+  // Geolocation function
+  const getCurrentLocation = () => {
+    setLocationLoading(true);
+    setLocationError('');
+    setHasLocationPermission(false);
+
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation is not supported by this browser. Please use a modern browser to continue.');
+      setLocationLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude.toFixed(6);
+        const lng = position.coords.longitude.toFixed(6);
+        setLatitude(lat);
+        setLongitude(lng);
+        setHasLocationPermission(true);
+        setLocationLoading(false);
+        setLocationError('');
+        
+        // Optional: Reverse geocoding to get location name
+        reverseGeocode(lat, lng);
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        let errorMessage = 'Location access is required to proceed with registration.';
+        
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Location access denied. Please allow location access and refresh the page to continue registration.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Location information is unavailable. Please check your device settings and try again.';
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Location request timed out. Please refresh the page and try again.';
+            break;
+        }
+        
+        setLocationError(errorMessage);
+        setHasLocationPermission(false);
+        setLocationLoading(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // 5 minutes
+      }
+    );
+  };
+
+  // Reverse geocoding to get location name from coordinates
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      // Using OpenStreetMap Nominatim API (free, no API key required)
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=10&addressdetails=1`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.display_name) {
+          // Extract city, state, country from the response
+          const address = data.address;
+          let locationName = '';
+          
+          if (address.city || address.town || address.village) {
+            locationName += address.city || address.town || address.village;
+          }
+          if (address.state) {
+            locationName += locationName ? `, ${address.state}` : address.state;
+          }
+          if (address.country) {
+            locationName += locationName ? `, ${address.country}` : address.country;
+          }
+          
+          if (locationName) {
+            setLocation(locationName);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Reverse geocoding error:', error);
+      // Don't show error for reverse geocoding failure, lat/lng are still filled
+    }
+  };  const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    
+    // Check if location permission is granted
+    if (!hasLocationPermission || !latitude || !longitude) {
+      setError('Location access is required to complete registration. Please allow location access and try again.');
+      setLoading(false);
+      return;
+    }
+    
     try {
       if (!organizationId) {
         setError('Organization ID not found for selected role.');
@@ -90,9 +194,10 @@ export default function SignUpPage() {
       if (userRole === 'MANUFACTURER') navigate('/manudash');
       else if (userRole === 'LABS') navigate('/labs-dashboard');
       else if (userRole === 'DISTRIBUTOR') navigate('/distributordash');
+      else if (userRole === 'FARMER') navigate('/'); // Redirect farmers to landing page
       else {
-        console.log('Unknown role, redirecting to home');
-        navigate('/');
+        console.log('Unknown role, redirecting to dashboard redirect');
+        navigate('/dashboard'); // Let DashboardRedirect handle it
       }
     } catch (err) {
       setError(err.message || 'Signup failed');
@@ -107,6 +212,19 @@ export default function SignUpPage() {
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-lg sm:max-w-2xl">
           <div className="card-responsive">
+            {/* Go Back Button */}
+            <div className="flex justify-start mb-4">
+              <button 
+                onClick={handleLandingClick}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="text-sm">Back to Home</span>
+              </button>
+            </div>
+            
               <div className="flex justify-center mb-6">
                    <AyuTraceLogo size="medium" onClick={handleLandingClick} />
               </div>
@@ -154,25 +272,102 @@ export default function SignUpPage() {
                   <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+919876543210" className="input-responsive" />
                 </div>
                 <div>
-                  <label className="block responsive-text-sm font-medium text-gray-700 mb-1">Location (Optional)</label>
-                  <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Satara District, Maharashtra" className="input-responsive" />
+                  <label className="block responsive-text-sm font-medium text-gray-700 mb-1">
+                    Location (Required) {locationLoading && <span className="text-blue-500">(Auto-detecting...)</span>}
+                  </label>
+                  <input 
+                    type="text" 
+                    value={location} 
+                    readOnly
+                    placeholder="Auto-detected location will appear here" 
+                    className="input-responsive bg-gray-50 cursor-not-allowed" 
+                    title="Location is automatically detected and cannot be edited"
+                  />
+                  {locationError && (
+                    <p className="text-xs text-red-500 mt-1">{locationError}</p>
+                  )}
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block responsive-text-sm font-medium text-gray-700 mb-1">Latitude (Optional)</label>
-                  <input type="number" step="any" value={latitude} onChange={(e) => setLatitude(e.target.value)} placeholder="17.6868" className="input-responsive" />
+                  <label className="block responsive-text-sm font-medium text-gray-700 mb-1">
+                    Latitude {locationLoading && <span className="text-blue-500">(Auto-detecting...)</span>}
+                  </label>
+                  <input 
+                    type="number" 
+                    step="any" 
+                    value={latitude} 
+                    readOnly
+                    placeholder="Auto-detected" 
+                    className="input-responsive bg-gray-50 cursor-not-allowed" 
+                    title="Latitude is automatically detected from your location"
+                  />
                 </div>
                 <div>
-                  <label className="block responsive-text-sm font-medium text-gray-700 mb-1">Longitude (Optional)</label>
-                  <input type="number" step="any" value={longitude} onChange={(e) => setLongitude(e.target.value)} placeholder="74.0183" className="input-responsive" />
+                  <label className="block responsive-text-sm font-medium text-gray-700 mb-1">
+                    Longitude {locationLoading && <span className="text-blue-500">(Auto-detecting...)</span>}
+                  </label>
+                  <input 
+                    type="number" 
+                    step="any" 
+                    value={longitude} 
+                    readOnly
+                    placeholder="Auto-detected" 
+                    className="input-responsive bg-gray-50 cursor-not-allowed" 
+                    title="Longitude is automatically detected from your location"
+                  />
                 </div>
               </div>
               
-              <button type="submit" className="button-responsive w-full bg-emerald-600 text-white font-bold shadow-lg hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105" disabled={loading}>
-                {loading ? 'Signing Up...' : 'Sign Up'}
+              {(latitude && longitude) && hasLocationPermission && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span className="text-sm text-green-700">
+                      Location detected: {parseFloat(latitude).toFixed(4)}, {parseFloat(longitude).toFixed(4)}
+                    </span>
+                  </div>
+                </div>
+              )}
+              
+              <button 
+                type="submit" 
+                className={`button-responsive w-full font-bold shadow-lg transition-all duration-300 transform ${
+                  hasLocationPermission && !loading 
+                    ? 'bg-emerald-600 text-white hover:bg-emerald-700 hover:scale-105' 
+                    : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                }`}
+                disabled={loading || !hasLocationPermission}
+              >
+                {loading ? 'Signing Up...' : hasLocationPermission ? 'Sign Up' : 'Location Access Required'}
               </button>
+              
+              {!hasLocationPermission && !locationLoading && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-red-800">Location Access Required</h4>
+                      <p className="text-sm text-red-600 mt-1">
+                        Please allow location access in your browser and refresh the page to continue with registration.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => window.location.reload()}
+                        className="mt-2 text-sm text-red-700 underline hover:text-red-800"
+                      >
+                        Refresh Page
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </form>
 
           {loading && <div className="text-center text-gray-500 responsive-text-sm">Loading...</div>}

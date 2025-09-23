@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { apiRequest, generateQRCode, getQRCodeImage, getQRCodes, scanQRCode } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import ScanResults from '../components/Dashboard/ScanResults';
 import { readQRCodeFromImage } from '../utils/qrReader';
 
@@ -24,6 +25,7 @@ const batches = [
 ];
 
 export default function CheckDash() {
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState('Dashboard'); // Default to Dashboard
   const [qrFile, setQrFile] = useState(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -484,10 +486,7 @@ export default function CheckDash() {
               <SearchIcon className="h-6 w-6 text-gray-400 mx-2 hidden sm:block" />
               <UserIcon className="h-6 w-6 text-gray-400 mx-2 hidden sm:block" />
               <button
-                onClick={() => {
-                  localStorage.removeItem('sessionEmail');
-                  window.location.href = '/login';
-                }}
+                onClick={logout}
                 className="ml-4 text-sm text-gray-700 hover:text-gray-900"
               >
                 Logout

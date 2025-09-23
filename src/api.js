@@ -1,9 +1,5 @@
-// Get current user profile
-export function getProfile() {
-  return apiRequest('/api/auth/me', { method: 'GET' });
-}
 // Central API utility for backend requests
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 let token = localStorage.getItem('token');
 
@@ -55,6 +51,11 @@ export function signupUser(data) {
     method: 'POST',
     body: JSON.stringify(data),
   });
+}
+
+// Get current user profile
+export function getProfile() {
+  return apiRequest('/api/auth/me', { method: 'GET' });
 }
 
 // Example for other modules
@@ -307,4 +308,95 @@ export async function downloadCertificate(testId) {
     console.error('Certificate download error:', error);
     throw error;
   }
+}
+
+// Distributor API Functions
+export function getDistributorDashboard() {
+  return apiRequest('/api/distributor/dashboard', { method: 'GET' });
+}
+
+export function getDistributorInventory(params = {}) {
+  const queryParams = new URLSearchParams({
+    page: params.page || 1,
+    limit: params.limit || 100,  // Get more items by default
+    ...(params.status && { status: params.status }),
+    ...(params.productType && { productType: params.productType }),
+    ...(params.location && { location: params.location })
+  });
+  return apiRequest(`/api/distributor/inventory?${queryParams.toString()}`, { method: 'GET' });
+}
+
+export function addInventoryItem(itemData) {
+  return apiRequest('/api/distributor/inventory', {
+    method: 'POST',
+    body: JSON.stringify(itemData),
+  });
+}
+
+export function updateInventoryItem(inventoryId, updateData) {
+  return apiRequest(`/api/distributor/inventory/${inventoryId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updateData),
+  });
+}
+
+export function getDistributorShipments(params = {}) {
+  const queryParams = new URLSearchParams({
+    page: params.page || 1,
+    limit: params.limit || 10,
+    ...(params.status && { status: params.status }),
+    ...(params.recipientType && { recipientType: params.recipientType }),
+    ...(params.trackingNumber && { trackingNumber: params.trackingNumber })
+  });
+  return apiRequest(`/api/distributor/shipments?${queryParams.toString()}`, { method: 'GET' });
+}
+
+export function createShipment(shipmentData) {
+  return apiRequest('/api/distributor/shipments', {
+    method: 'POST',
+    body: JSON.stringify(shipmentData),
+  });
+}
+
+export function updateShipmentStatus(shipmentId, statusData) {
+  return apiRequest(`/api/distributor/shipments/${shipmentId}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify(statusData),
+  });
+}
+
+export function getDistributorVerifications(params = {}) {
+  const queryParams = new URLSearchParams({
+    page: params.page || 1,
+    limit: params.limit || 10,
+    ...(params.status && { status: params.status }),
+    ...(params.verificationType && { verificationType: params.verificationType }),
+    ...(params.entityType && { entityType: params.entityType })
+  });
+  return apiRequest(`/api/distributor/verifications?${queryParams.toString()}`, { method: 'GET' });
+}
+
+export function createVerification(verificationData) {
+  return apiRequest('/api/distributor/verifications', {
+    method: 'POST',
+    body: JSON.stringify(verificationData),
+  });
+}
+
+export function updateVerification(verificationId, updateData) {
+  return apiRequest(`/api/distributor/verifications/${verificationId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updateData),
+  });
+}
+
+export function generateDistributorAnalytics(reportType = 'INVENTORY_SUMMARY') {
+  return apiRequest(`/api/distributor/analytics?reportType=${reportType}`, { method: 'GET' });
+}
+
+export function scanDistributorQRCode(qrCode) {
+  return apiRequest('/api/distributor/scan-qr', {
+    method: 'POST',
+    body: JSON.stringify({ qrCode })
+  });
 }

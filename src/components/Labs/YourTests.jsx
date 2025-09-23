@@ -440,7 +440,7 @@ const YourTests = () => {
                     throw new Error('Received empty certificate file');
                 }
                 
-                // Create download link
+                // Create download link safely
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -449,10 +449,13 @@ const YourTests = () => {
                 document.body.appendChild(a);
                 a.click();
                 
-                // Clean up
+                // Clean up safely
                 setTimeout(() => {
                     window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
+                    // Check if element is still in DOM before removing
+                    if (a.parentNode) {
+                        a.parentNode.removeChild(a);
+                    }
                 }, 100);
                 
                 showSuccess('Certificate downloaded successfully!');
@@ -1450,7 +1453,7 @@ const YourTests = () => {
 
             {/* Test Results Entry Modal */}
             {showResultsModal && selectedTestForResults && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                         <div className="p-6">
                             <div className="flex items-center justify-between mb-6">
@@ -1881,7 +1884,10 @@ const YourTests = () => {
                                                             link.download = `certificate_qr_${selectedCertificate.testId}.png`;
                                                             document.body.appendChild(link);
                                                             link.click();
-                                                            document.body.removeChild(link);
+                                                            // Safe removal check
+                                                            if (link.parentNode) {
+                                                                link.parentNode.removeChild(link);
+                                                            }
                                                             showSuccess('QR code downloaded successfully!');
                                                         } else {
                                                             showError('QR code image not available for download');
@@ -2195,7 +2201,10 @@ const YourTests = () => {
                                                         link.download = `qr_code_${selectedTestForQR.testId}.png`;
                                                         document.body.appendChild(link);
                                                         link.click();
-                                                        document.body.removeChild(link);
+                                                        // Safe removal check
+                                                        if (link.parentNode) {
+                                                            link.parentNode.removeChild(link);
+                                                        }
                                                         showSuccess('QR code download started!');
                                                     } else {
                                                         showError('QR code image not available for download');

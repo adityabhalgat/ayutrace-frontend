@@ -42,7 +42,7 @@ export default function LoginPage() {
     setError('');
     
     try {
-      console.log('Attempting login...');
+      console.log('Attempting login with:', { email });
       const res = await loginUser({ 
         email, 
         password 
@@ -55,18 +55,25 @@ export default function LoginPage() {
         throw new Error('Login function is not available from AuthContext');
       }
       
+      // Check response structure
+      if (!res.data || !res.data.user || !res.data.token) {
+        throw new Error('Invalid response structure from login API');
+      }
+      
       // Use AuthContext login method
       login(res.data.user, res.data.token);
       
       // Extract role from response: res.data.user.orgType
       const userRole = res.data.user.orgType;
       console.log('Login successful, user role:', userRole);
+      console.log('Full user object:', res.data.user);
       
       // Redirect to dashboard which will handle role-based routing
+      console.log('Navigating to /dashboard');
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message || 'Login failed');
-      console.error('Login error:', err);
+      console.error('Login error details:', err);
+      setError(err.response?.data?.message || err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -77,6 +84,19 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-md sm:max-w-lg">
           <div className="card-responsive">
+            {/* Go Back Button */}
+            <div className="flex justify-start mb-4">
+              <button 
+                onClick={handleLandingClick}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="text-sm">Back to Home</span>
+              </button>
+            </div>
+            
             <div className="flex justify-center mb-6">
               <AyuTraceLogo size="medium" onClick={handleLandingClick} />
             </div>

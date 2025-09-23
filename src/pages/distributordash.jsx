@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { generateQRCode, getQRCodeImage, getQRCodes } from '../api';
+import { useAuth } from '../contexts/AuthContext';
 
 // --- SVG Icons ---
 const LeafIcon = ({ className }) => (
@@ -75,6 +76,7 @@ const ClockIcon = ({ className }) => (
 
   const DistributorDashboard = () => {
   const navigate = useNavigate();
+  const { user: authUser, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('Home');
   const [user, setUser] = useState(null);
   const [existingQRCodes, setExistingQRCodes] = useState([]);
@@ -107,10 +109,7 @@ const ClockIcon = ({ className }) => (
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('userRole');
-    navigate('/');
+    logout();
   };
 
   const handleTrackShipment = (shipment) => {

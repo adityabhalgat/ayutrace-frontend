@@ -30,6 +30,7 @@ const AddTests = () => {
     const [isScanning, setIsScanning] = useState(false);
     const [scanLoading, setScanLoading] = useState(false);
     const [showQRModal, setShowQRModal] = useState(false);
+    const [scannedQRData, setScannedQRData] = useState(null); // Store complete QR data
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const intervalRef = useRef(null);
@@ -194,10 +195,16 @@ const AddTests = () => {
                 notes: testForm.notes || '',
                 batchNumber: testForm.batchNumber,
                 // Try to link to raw material batch if batch number is provided
-                ...(testForm.batchNumber && { batchId: testForm.batchNumber })
+                ...(testForm.batchNumber && { batchId: testForm.batchNumber }),
+                // Include QR data if available (for finished good linking)
+                ...(scannedQRData && { 
+                    qrData: scannedQRData,
+                    finishedGoodId: scannedQRData.entityType === 'FINISHED_GOOD' ? scannedQRData.entityId : undefined
+                })
             };
 
             console.log('Submitting test data:', testData); // Debug log
+            console.log('Scanned QR Data:', scannedQRData); // Debug log
 
             const response = await createLabTest(testData);
             
@@ -218,6 +225,9 @@ const AddTests = () => {
                     collectionDate: '',
                     notes: ''
                 });
+                
+                // Clear scanned QR data
+                setScannedQRData(null);
 
                 // Clear success message after 5 seconds
                 setTimeout(() => setSuccess(''), 5000);
@@ -358,6 +368,15 @@ const AddTests = () => {
                         manufacturerName = `${event.farmer.firstName} ${event.farmer.lastName}`.trim();
                     }
                 }
+                
+                // Store the complete QR data for lab test submission
+                setScannedQRData({
+                    qrHash: qrHash,
+                    entityType: data.qrCode?.entityType,
+                    entityId: data.qrCode?.entityId,
+                    customData: data.qrCode?.customData,
+                    rawQRData: qrData // Store original QR content
+                });
                 
                 // Update the form with extracted data
                 setTestForm(prev => ({
@@ -575,15 +594,23 @@ const AddTests = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowQRModal(true)}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                                        className={`px-4 py-2 ${scannedQRData ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-lg transition-colors flex items-center space-x-2`}
                                         title="Scan QR Code for Manufacturer Info"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 16h4.01M12 16h.01M8 12h.01" />
                                         </svg>
-                                        <span>QR</span>
+                                        <span>{scannedQRData ? '✓ QR' : 'QR'}</span>
                                     </button>
                                 </div>
+                                {scannedQRData && (
+                                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
+                                        <p className="text-sm text-green-700">
+                                            🔗 QR Data Linked: {scannedQRData.entityType} 
+                                            {scannedQRData.customData?.productInfo && ` - ${scannedQRData.customData.productInfo}`}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
                             <div>
@@ -905,7 +932,7 @@ const AddTests = () => {
 
             {/* QR Scanning Modal */}
             {showQRModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center z-50">
                     <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-2xl font-bold text-gray-900">Scan QR Code for Manufacturer Info</h3>

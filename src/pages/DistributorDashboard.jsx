@@ -9,17 +9,18 @@ import Sidebar from '../components/UI/Sidebar';
 import MobileNavigation from '../components/UI/MobileNavigation';
 
 // Import Dashboard Sections
-import HomeSection from '../components/Dashboard/HomeSection';
-import YourGoodsComponent from '../components/Dashboard/YourGoodsComponent';
+import DistributorHomeSection from '../components/Dashboard/Distributor/DistributorHomeSection';
+import InventoryComponent from '../components/Dashboard/Distributor/InventoryComponent';
+import ModernShipmentsSection from '../components/Distributor/Modern/ModernShipmentsSection';
+import AnalyticsComponent from '../components/Dashboard/Distributor/AnalyticsComponent';
+import VerificationComponent from '../components/Dashboard/Distributor/VerificationComponent';
 import VerifyComponent from '../components/Dashboard/VerifyComponent';
-import AddGoodsComponent from '../components/Dashboard/AddGoodsComponent';
-import CheckBlockchainComponent from '../components/Dashboard/CheckBlockchainComponent';
 
 // Import Modals
 import ProfileModal from '../components/Modals/ProfileModal';
 
-// Main ManufacturerDashboard Component
-export default function ManufacturerDashboard() {
+// Main DistributorDashboard Component
+export default function DistributorDashboard() {
     const [activeTab, setActiveTab] = useState('Home');
     const navigate = useNavigate();
     const { user, logout } = useAuth();
@@ -37,12 +38,10 @@ export default function ManufacturerDashboard() {
         setProfileError('');
         try {
             const response = await getProfile();
-            console.log('Profile API Response:', response); // Debug log
-            console.log('Profile data:', response.data); // Debug log
-            // The response is directly the data, not wrapped in a data property
+            console.log('Profile API Response:', response);
             setProfileData(response);
         } catch (err) {
-            console.error('Profile fetch error:', err); // Debug log
+            console.error('Profile fetch error:', err);
             setProfileError('Failed to fetch profile: ' + (err.message || 'Unknown error'));
         } finally {
             setProfileLoading(false);
@@ -55,18 +54,30 @@ export default function ManufacturerDashboard() {
         setProfileError('');
     };
 
+    // Distributor-specific sidebar items
+    const sidebarItems = [
+        'Home',
+        'Inventory',
+        'Shipments',
+        'Verify',
+        'Analytics',
+        'Verifications'
+    ];
+
     const renderContent = () => {
         switch (activeTab) {
             case 'Home':
-                return <HomeSection />;
-            case 'Your Goods':
-                return <YourGoodsComponent setActiveTab={setActiveTab} />;
+                return <DistributorHomeSection />;
+            case 'Inventory':
+                return <InventoryComponent setActiveTab={setActiveTab} />;
+            case 'Shipments':
+                return <ModernShipmentsSection />;
             case 'Verify':
                 return <VerifyComponent />;
-            case 'Add Goods':
-                return <AddGoodsComponent />;
-            case 'Check Blockchain':
-                return <CheckBlockchainComponent />;
+            case 'Analytics':
+                return <AnalyticsComponent />;
+            case 'Verifications':
+                return <VerificationComponent />;
             default:
                 return (
                     <div className="h-full flex items-center justify-center">
@@ -92,30 +103,33 @@ export default function ManufacturerDashboard() {
                 <Sidebar 
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
+                    sidebarItems={sidebarItems}
                 />
 
                 {/* Main Content */}
-                <main className="flex-1 overflow-y-auto"> 
-                    <div className="h-full px-3 sm:px-4 lg:px-6">
+                <main className="flex-1 overflow-auto">
+                    <div className="p-6">
                         {renderContent()}
                     </div>
                 </main>
             </div>
 
-            {/* Profile Modal (Top Bar) */}
-            <ProfileModal
-                showProfile={showProfile}
-                closeProfile={closeProfile}
-                profileLoading={profileLoading}
-                profileError={profileError}
-                profileData={profileData}
-            />
-
             {/* Mobile Navigation */}
             <MobileNavigation 
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
+                sidebarItems={sidebarItems}
             />
+
+            {/* Profile Modal */}
+            {showProfile && (
+                <ProfileModal 
+                    onClose={closeProfile}
+                    profileData={profileData}
+                    profileLoading={profileLoading}
+                    profileError={profileError}
+                />
+            )}
         </div>
     );
 }

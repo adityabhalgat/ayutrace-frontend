@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProfile } from '../api';
+import { useAuth } from '../contexts/AuthContext';
 
 // Import UI Components
 import TopNavigation from '../components/UI/TopNavigation';
@@ -22,6 +23,7 @@ import ProfileModal from '../components/Modals/ProfileModal';
 export default function AdminDashboard() {
     const [activeTab, setActiveTab] = useState('Dashboard');
     const navigate = useNavigate();
+    const { user, logout } = useAuth();
     
     // Profile modal state for top bar
     const [showProfile, setShowProfile] = useState(false);
@@ -48,12 +50,6 @@ export default function AdminDashboard() {
         setShowProfile(false);
         setProfileData(null);
         setProfileError('');
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('sessionEmail');
-        localStorage.removeItem('token');
-        navigate('/login');
     };
 
     const renderContent = () => {
@@ -89,7 +85,7 @@ export default function AdminDashboard() {
             {/* Top Navigation */}
             <TopNavigation 
                 handleProfileClick={handleProfileClick}
-                handleLogout={handleLogout}
+                handleLogout={logout}
             />
 
             <div className="flex flex-1 overflow-hidden">
