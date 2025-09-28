@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
 
 export default function ModernTopbar({ 
@@ -11,6 +12,7 @@ export default function ModernTopbar({
   theme 
 }) {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   
   // Section labels mapping
   const sectionLabels = {
@@ -334,9 +336,21 @@ export default function ModernTopbar({
               <span>Profile Settings</span>
             </button>
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 console.log('Logout button clicked in ModernTopbar');
                 setShowProfileMenu(false);
+                
+                // Clear authentication data
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('userRole');
+                
+                // Navigate to home page immediately
+                navigate('/', { replace: true });
+                
+                // Call logout to update auth context
                 logout();
               }}
               className="w-full flex items-center space-x-3 px-3 py-2 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"

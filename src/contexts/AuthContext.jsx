@@ -61,14 +61,18 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         console.log('Logout function called - clearing localStorage and user state');
+        
+        // Clear all auth-related data from localStorage
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('userRole');
+        
+        // Update auth state
         setUser(null);
         setError('');
         
-        // Force a complete page reload to clear any cached state
-        window.location.href = '/';
+        // Use window.location.replace for a more forceful redirect
+        window.location.replace('/');
     };
 
     const login = (userData, token) => {
