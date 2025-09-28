@@ -21,7 +21,8 @@ const AdminHomeSection = () => {
             
             console.log('Fetching dashboard data...');
             
-            const response = await fetch('http://localhost:3000/api/admin/dashboard', {
+                                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/dashboard`, {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

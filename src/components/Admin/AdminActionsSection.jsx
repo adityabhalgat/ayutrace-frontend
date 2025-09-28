@@ -12,7 +12,8 @@ const AdminActionsSection = () => {
     const fetchAdminActions = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/api/admin/actions', {
+                                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/actions`, {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

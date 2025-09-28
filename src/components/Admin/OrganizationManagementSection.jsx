@@ -32,7 +32,7 @@ const OrganizationManagementSection = () => {
             
             console.log('Fetching organizations with params:', queryParams.toString());
             
-            const response = await fetch(`http://localhost:3000/api/admin/organizations?${queryParams}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/organizations?${queryParams}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ const OrganizationManagementSection = () => {
             setCreateLoading(true);
             const token = localStorage.getItem('token');
             
-            const response = await fetch('http://localhost:3000/api/admin/organizations', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/organizations`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -89,7 +89,7 @@ const OrganizationManagementSection = () => {
         try {
             const token = localStorage.getItem('token');
             
-            const response = await fetch(`http://localhost:3000/api/admin/organizations/${organizationId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/organizations/${organizationId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -116,7 +116,7 @@ const OrganizationManagementSection = () => {
         try {
             const token = localStorage.getItem('token');
             
-            const response = await fetch(`http://localhost:3000/api/admin/organizations/${organizationId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/organizations/${organizationId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

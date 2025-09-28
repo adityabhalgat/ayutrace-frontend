@@ -80,7 +80,7 @@ const UserManagementSection = () => {
     const updateUserStatus = async (userId, updates) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/admin/users/${userId}/status`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/users/${userId}/status`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -133,7 +133,7 @@ const UserManagementSection = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/api/admin/users/create-admin', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/users/create-admin`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -171,7 +171,7 @@ const UserManagementSection = () => {
     const updateUserRole = async (userId, newRole) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/admin/users/${userId}/role`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/users/${userId}/role`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

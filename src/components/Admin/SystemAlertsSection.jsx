@@ -12,7 +12,7 @@ const SystemAlertsSection = () => {
     const fetchAlerts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/api/admin/alerts', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/alerts`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ const SystemAlertsSection = () => {
     const resolveAlert = async (alertId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/admin/alerts/${alertId}/resolve`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/alerts/${alertId}/resolve`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

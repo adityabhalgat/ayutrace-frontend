@@ -62,7 +62,7 @@ const QrCodeIcon = ({ className }) => (
 
 // --- Video Animation Component ---
 const VideoAnimation = () => {
-    const videoPath = "/src/images/PlantScanning.mp4"; // Example path
+    const videoPath = "/PlantScanning.mp4"; // Path from public folder
     return (
         <div className="relative w-full max-w-xs sm:max-w-sm h-48 sm:h-64 md:h-80 flex items-center justify-center bg-black/10 rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
             <video
