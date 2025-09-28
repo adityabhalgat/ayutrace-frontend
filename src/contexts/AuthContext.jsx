@@ -60,10 +60,14 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const logout = () => {
+        console.log('Logout function called - clearing localStorage and user state');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('userRole');
         setUser(null);
+        setError('');
+        
+        // Force a complete page reload to clear any cached state
         window.location.href = '/';
     };
 

@@ -335,6 +335,7 @@ export default function ModernTopbar({
             </button>
             <button
               onClick={() => {
+                console.log('Logout button clicked in ModernTopbar');
                 setShowProfileMenu(false);
                 logout();
               }}
