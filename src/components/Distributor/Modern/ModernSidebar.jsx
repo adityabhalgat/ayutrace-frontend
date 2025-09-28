@@ -80,9 +80,9 @@ export default function ModernSidebar({
     <motion.div
       initial={{ x: -280 }}
       animate={{ x: 0 }}
-      className={`fixed left-0 top-0 h-full ${theme.colors.sidebar} border-r border-gray-200/50 z-50 transition-all duration-300 ${
-        collapsed ? 'w-16' : 'w-64'
-      }`}
+      className={`fixed lg:relative left-0 top-0 h-full ${theme.colors.sidebar} border-r border-gray-200/50 z-50 transition-all duration-300 ${
+        collapsed ? 'w-16' : 'w-64 lg:w-64'
+      } lg:translate-x-0`}
     >
       {/* Logo Section */}
       <div className="h-16 flex items-center justify-center border-b border-gray-200/50">

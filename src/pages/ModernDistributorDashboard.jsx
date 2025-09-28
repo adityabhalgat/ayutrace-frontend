@@ -197,21 +197,23 @@ export default function ModernDistributorDashboard() {
   }
 
   return (
-    <div className={`min-h-screen ${theme.colors.background} flex`}>
-      {/* Modern Sidebar */}
-      <ModernSidebar
-        navigationItems={navigationItems}
-        activeSection={activeSection}
-        onSectionChange={setActiveSection}
-        collapsed={sidebarCollapsed}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-        theme={theme}
-      />
+    <div className={`min-h-screen ${theme.colors.background} flex relative`}>
+      {/* Modern Sidebar - Hidden on mobile by default */}
+      <div className={`${sidebarCollapsed ? 'hidden lg:block' : 'block'} lg:relative fixed inset-y-0 left-0 z-50`}>
+        <ModernSidebar
+          navigationItems={navigationItems}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          theme={theme}
+        />
+      </div>
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Full width on mobile */}
       <div className={`flex-1 flex flex-col transition-all duration-300 ${
-        sidebarCollapsed ? 'ml-16' : 'ml-64'
-      }`}>
+        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
+      } ml-0`}>
         {/* Modern Top Bar */}
         <ModernTopbar
           onProfileClick={handleProfileClick}
@@ -221,8 +223,8 @@ export default function ModernDistributorDashboard() {
           theme={theme}
         />
 
-        {/* Dynamic Content Area */}
-        <main className="flex-1 p-6 overflow-auto">
+        {/* Dynamic Content Area - Responsive padding */}
+        <main className="flex-1 p-3 sm:p-4 lg:p-6 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection}
@@ -251,10 +253,10 @@ export default function ModernDistributorDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay - Show when sidebar is open on mobile */}
       {!sidebarCollapsed && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm lg:hidden z-40"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-40"
           onClick={() => setSidebarCollapsed(true)}
         />
       )}
