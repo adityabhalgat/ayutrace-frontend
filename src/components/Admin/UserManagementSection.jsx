@@ -50,7 +50,7 @@ const UserManagementSection = () => {
 
             console.log('Fetching users with params:', queryParams.toString());
             
-            const response = await fetch(`http://localhost:3000/api/admin/users?${queryParams}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin/users?${queryParams}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
