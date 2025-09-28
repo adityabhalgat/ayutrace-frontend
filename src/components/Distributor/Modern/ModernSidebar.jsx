@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 // Modern Icon Components
 const HomeIcon = ({ className }) => (
@@ -32,12 +34,19 @@ const ShieldIcon = ({ className }) => (
   </svg>
 );
 
+const LogoutIcon = ({ className }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+  </svg>
+);
+
 const iconComponents = {
   HomeIcon,
   CubeIcon,
   TruckIcon,
   ChartIcon,
-  ShieldIcon
+  ShieldIcon,
+  LogoutIcon
 };
 
 export default function ModernSidebar({ 
@@ -48,6 +57,25 @@ export default function ModernSidebar({
   onToggleCollapse, 
   theme 
 }) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Logout button clicked in ModernSidebar');
+    
+    // Clear authentication data
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userRole');
+    
+    // Navigate to home page immediately
+    navigate('/', { replace: true });
+    
+    // Call logout to update auth context
+    logout();
+  };
   return (
     <motion.div
       initial={{ x: -280 }}
@@ -130,8 +158,23 @@ export default function ModernSidebar({
         })}
       </nav>
 
-      {/* Toggle Button */}
-      <div className="absolute bottom-6 left-0 right-0 px-3">
+      {/* Bottom Actions */}
+      <div className="absolute bottom-6 left-0 right-0 px-3 space-y-2">
+        {/* Logout Button */}
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors group"
+        >
+          <LogoutIcon className="w-4 h-4" />
+          {!collapsed && (
+            <span className="ml-2 text-sm font-medium">Logout</span>
+          )}
+        </motion.button>
+
+        {/* Toggle Button */}
         <motion.button
           type="button"
           whileHover={{ scale: 1.05 }}
