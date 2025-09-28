@@ -105,19 +105,12 @@ const VerificationComponent = () => {
     }
   };
 
-  const handleUpdateStatus = async (statusData) => {
-    try {
-      await updateVerification(selectedVerification.verificationId, statusData);
-      setShowStatusModal(false);
-      setSelectedVerification(null);
-      fetchVerifications();
-    } catch (err) {
-      console.error('Error updating verification status:', err);
-      alert('Failed to update verification status');
-    }
-  };
-
-  const handleQRScan = async (qrCode) => {
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  
+  const handleUpdateStatus = (id, newStatus) => {
+    // Update status logic
+    setShowStatusModal(false);
+  };  const handleQRScan = async (qrCode) => {
     try {
       const response = await scanDistributorQRCode(qrCode);
       setQrScanResult(response.data);

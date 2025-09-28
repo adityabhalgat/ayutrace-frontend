@@ -174,9 +174,12 @@ export default function SimpleDistributorTest() {
       <header className="bg-white shadow-sm border-b">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">🌿 AyuTrace Distributor</h1>
-              <p className="text-gray-600">Welcome {user?.name || 'Distributor'}! Dashboard Working!</p>
+            <div className="flex items-center space-x-3">
+              <img src="/Logo (1).png" alt="Logo" className="h-16 w-16 object-contain" />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Distributor</h1>
+                <p className="text-gray-600">Welcome {user?.name || 'Distributor'}! Dashboard Working!</p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">

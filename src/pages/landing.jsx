@@ -112,7 +112,7 @@ const LandingPage = () => {
             {/* Header */}
             <header className={`fixed top-0 left-0 w-full z-20 p-2 sm:p-4 md:p-6 transition-all duration-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'}`}>
                 <div className="responsive-container flex justify-between items-center bg-white/50 backdrop-blur-sm p-2 sm:p-3 rounded-full shadow-sm border border-stone-200/80">
-                    <AyuTraceLogo size="small" onClick={() => navigate('landing')} />
+                    <AyuTraceLogo size="small" showText={false} onClick={() => navigate('landing')} />
                     <div className="flex items-center gap-1 sm:gap-2">
                         <button onClick={handleLoginClick} className="text-gray-600 font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full hover:bg-emerald-100 transition-colors text-sm sm:text-base">
                             Login
@@ -164,7 +164,7 @@ const LandingPage = () => {
                     <div className={`text-center mb-12 sm:mb-16 transition-all duration-700 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                         <h2 className="responsive-text-2xl md:text-4xl font-bold mb-3">The Future of Botanical Integrity</h2>
                         <p className="responsive-text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-                            AyuTrace provides a single source of truth, creating a transparent ecosystem for farmers, manufacturers, and consumers.
+                            Our platform provides a single source of truth, creating a transparent ecosystem for farmers, manufacturers, and consumers.
                         </p>
                     </div>
                     <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mt-12 sm:mt-16 transition-all duration-700 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
@@ -269,7 +269,7 @@ const LandingPage = () => {
             {/* Footer */}
             <footer className="bg-gray-800 text-white py-8">
                 <div className="container mx-auto text-center">
-                    <p>&copy; 2025 AyuTrace Team. Building a transparent future for Ayurveda.</p>
+                    <p>&copy; 2025 Supply Chain Team. Building a transparent future for Ayurveda.</p>
                 </div>
             </footer>
         </div>
@@ -283,10 +283,10 @@ const SignUpPage = ({ navigateTo }) => {
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl p-8">
                     <div className="flex justify-center mb-6">
-                        <AyuTraceLogo size="medium" onClick={() => navigateTo('landing')} />
+                        <AyuTraceLogo size="medium" showText={false} onClick={() => navigateTo('landing')} />
                     </div>
                     <h2 className="text-2xl font-bold text-center text-gray-800 mb-1">Create Your Account</h2>
-                    <p className="text-center text-gray-500 mb-8">Join the AyuTrace platform for transparent supply chain management.</p>
+                    <p className="text-center text-gray-500 mb-8">Join the platform for transparent supply chain management.</p>
                     <form className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>

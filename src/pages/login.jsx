@@ -98,10 +98,10 @@ export default function LoginPage() {
             </div>
             
             <div className="flex justify-center mb-6">
-              <AyuTraceLogo size="medium" onClick={handleLandingClick} />
+              <AyuTraceLogo size="medium" showText={false} onClick={handleLandingClick} />
             </div>
             <h2 className="responsive-text-xl font-bold text-center text-gray-800 mb-1">Welcome Back!</h2>
-            <p className="text-center text-gray-500 mb-6 sm:mb-8 responsive-text-sm">Login to your AyuTrace platform account.</p>
+            <p className="text-center text-gray-500 mb-6 sm:mb-8 responsive-text-sm">Login to your platform account.</p>
             <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block responsive-text-sm font-medium text-gray-700 mb-1">Email Address</label>

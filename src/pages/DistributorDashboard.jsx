@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProfile } from '../api';
 import { useAuth } from '../contexts/AuthContext';
+import { useResponsive } from '../hooks/useResponsive';
 
 // Import UI Components
 import TopNavigation from '../components/UI/TopNavigation';
 import Sidebar from '../components/UI/Sidebar';
 import MobileNavigation from '../components/UI/MobileNavigation';
+import { PageLoader } from '../components/UI/Loading';
 
 // Import Dashboard Sections
 import DistributorHomeSection from '../components/Dashboard/Distributor/DistributorHomeSection';
@@ -90,25 +92,50 @@ export default function DistributorDashboard() {
         }
     };
 
+    const { isMobile, isTablet, isDesktop } = useResponsive();
+
+    const mainContainerClasses = 'flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans';
+
+    const contentAreaClasses = 'flex flex-1 overflow-hidden flex-col md:flex-row';
+
+    const mainContentClasses = 'flex-1 overflow-auto';
+
+    const contentPaddingClasses = 'h-full p-3 md:p-4 lg:p-6';
+
+    // Show loading screen for authenticated users
+    if (!user) {
+        return <PageLoader message="Loading your distributor dashboard..." />;
+    }
+
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+        <div className={mainContainerClasses}>
+            <a href="#main-content" className="skip-to-main">
+                Skip to main content
+            </a>
+            
             {/* Top Navigation */}
             <TopNavigation 
                 handleProfileClick={handleProfileClick}
                 handleLogout={logout}
             />
 
-            <div className="flex flex-1 overflow-hidden">
+            <div className={contentAreaClasses}>
                 {/* Sidebar */}
                 <Sidebar 
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                     sidebarItems={sidebarItems}
+                    type="distributor"
                 />
 
                 {/* Main Content */}
-                <main className="flex-1 overflow-auto">
-                    <div className="p-6">
+                <main 
+                    id="main-content"
+                    className={mainContentClasses}
+                    role="main"
+                    aria-label="Distributor dashboard content"
+                >
+                    <div className={contentPaddingClasses}>
                         {renderContent()}
                     </div>
                 </main>
@@ -118,16 +145,17 @@ export default function DistributorDashboard() {
             <MobileNavigation 
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
-                sidebarItems={sidebarItems}
+                type="distributor"
             />
 
             {/* Profile Modal */}
             {showProfile && (
                 <ProfileModal 
+                    isOpen={showProfile}
                     onClose={closeProfile}
                     profileData={profileData}
-                    profileLoading={profileLoading}
-                    profileError={profileError}
+                    loading={profileLoading}
+                    error={profileError}
                 />
             )}
         </div>

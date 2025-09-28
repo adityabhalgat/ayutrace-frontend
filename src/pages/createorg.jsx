@@ -40,8 +40,7 @@ export default function CreateOrganization() {
         <div className="card-responsive">
           <div className="flex justify-center mb-6">
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-              <LeafIcon className="h-8 w-8 sm:h-10 sm:w-10 text-indigo-600" />
-              <span className="text-2xl sm:text-3xl font-bold text-gray-800">AyuTrace</span>
+              <img src="/Logo (1).png" alt="Logo" className="h-24 w-24 sm:h-28 sm:w-28 object-contain" />
             </div>
           </div>
           

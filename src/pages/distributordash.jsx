@@ -685,8 +685,7 @@ const ClockIcon = ({ className }) => (
           <div className="flex justify-between h-16">
             <div className="flex px-2 lg:px-0">
               <div className="flex items-center">
-                <LeafIcon className="h-8 w-8 text-emerald-600" />
-                <span className="ml-2 text-xl font-semibold text-gray-900">AyuTrace</span>
+                <img src="/Logo (1).png" alt="Logo" className="h-16 w-16 object-contain" />
               </div>
             </div>
             <div className="flex items-center lg:ml-4">

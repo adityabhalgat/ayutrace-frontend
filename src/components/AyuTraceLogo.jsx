@@ -1,11 +1,11 @@
 import React from 'react';
 
-// AyuTrace Logo Component
-const AyuTraceLogo = ({ size = "medium", className = "", showText = true, onClick = null }) => {
+// Logo Component
+const AyuTraceLogo = ({ size = "medium", className = "", showText = false, onClick = null }) => {
   const sizes = {
-    small: { icon: "h-8 w-8", text: "text-xl" },
-    medium: { icon: "h-14 w-14", text: "text-4xl" },
-    large: { icon: "h-20 w-20", text: "text-5xl" }
+    small: { icon: "h-16 w-16", text: "text-xl" },
+    medium: { icon: "h-24 w-24", text: "text-4xl" },
+    large: { icon: "h-32 w-32", text: "text-5xl" }
   };
 
   const currentSize = sizes[size] || sizes.medium;
@@ -13,7 +13,7 @@ const AyuTraceLogo = ({ size = "medium", className = "", showText = true, onClic
   const LogoIcon = ({ className }) => (
     <img 
       src="/Logo (1).png" 
-      alt="AyuTrace Logo" 
+      alt="Logo" 
       className={className.replace('text-emerald-600', '') + ' object-contain'}
     />
   );

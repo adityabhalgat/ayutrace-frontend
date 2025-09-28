@@ -226,10 +226,10 @@ export default function SignUpPage() {
             </div>
             
               <div className="flex justify-center mb-6">
-                   <AyuTraceLogo size="medium" onClick={handleLandingClick} />
+                   <AyuTraceLogo size="medium" showText={false} onClick={handleLandingClick} />
               </div>
             <h2 className="responsive-text-xl font-bold text-center text-gray-800 mb-1">Create Your Account</h2>
-            <p className="text-center text-gray-500 mb-6 sm:mb-8 responsive-text-sm">Join the AyuTrace platform for transparent supply chain management.</p>
+            <p className="text-center text-gray-500 mb-6 sm:mb-8 responsive-text-sm">Join the platform for transparent supply chain management.</p>
             
             <form className="space-y-4 sm:space-y-6" onSubmit={handleSignup}>
               {orgLoading && <div className="text-xs text-gray-500">Fetching organization ID...</div>}
@@ -263,7 +263,7 @@ export default function SignUpPage() {
                   <option value="LABS">Testing Laboratory</option>
                   <option value="DISTRIBUTOR">Distribution Partner</option>
                 </select>
-                <p className="text-xs text-gray-500 mt-1">Register your organization with the AyuTrace platform.</p>
+                <p className="text-xs text-gray-500 mt-1">Register your organization with the platform.</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

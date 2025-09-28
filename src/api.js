@@ -1,10 +1,15 @@
 // Central API utility for backend requests
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
-let token = localStorage.getItem('token');
+let token = null;
+if (typeof window !== 'undefined') {
+  token = localStorage.getItem('token');
+}
 
 export async function apiRequest(endpoint, options = {}) {
-  token = localStorage.getItem('token');
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('token');
+  }
   const url = `${API_BASE_URL}${endpoint}`;
   console.log('API_BASE_URL:', API_BASE_URL);
   console.log('Making API request to:', url);
@@ -290,7 +295,7 @@ export async function downloadCertificate(testId) {
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorMessage;
-      } catch (e) {
+      } catch (error) {
         const errorText = await response.text();
         errorMessage = errorText || errorMessage;
       }

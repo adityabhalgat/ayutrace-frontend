@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
-import Landing from './pages/landing';
-import Login from './pages/login';
-import Signup from './pages/signup';
-import CreateOrganization from './pages/createorg';
-import ManufacturerDashboard from './pages/manudash-modular';
-import CheckerDash from './pages/checkdash';
-import DistributorDashboard from './pages/DistributorDashboard';
-import SimpleDistributorDashboard from './pages/SimpleDistributorDashboard';
-import SimpleDistributorTest from './pages/SimpleDistributorTest';
-import ModernDistributorDashboard from './pages/ModernDistributorDashboard';
-import LabsDashboard from './components/Labs/LabsDashboard';
-import AdminDashboard from './pages/AdminDashboard';
-import VerifyPage from './pages/verify';
+import { PageLoader } from './components/UI/Loading';
+import { environment } from './config/environment';
 import './App.css';
+
+// Lazy load components for better performance
+const Landing = lazy(() => import('./pages/landing'));
+const Login = lazy(() => import('./pages/login'));
+const Signup = lazy(() => import('./pages/signup'));
+const CreateOrganization = lazy(() => import('./pages/createorg'));
+const ManufacturerDashboard = lazy(() => import('./pages/manudash-modular'));
+const CheckerDash = lazy(() => import('./pages/checkdash'));
+const DistributorDashboard = lazy(() => import('./pages/DistributorDashboard'));
+const SimpleDistributorDashboard = lazy(() => import('./pages/SimpleDistributorDashboard'));
+const SimpleDistributorTest = lazy(() => import('./pages/SimpleDistributorTest'));
+const ModernDistributorDashboard = lazy(() => import('./pages/ModernDistributorDashboard'));
+const LabsDashboard = lazy(() => import('./components/Labs/LabsDashboard'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const VerifyPage = lazy(() => import('./pages/verify'));
 
 // Dashboard redirect based on user role
 function DashboardRedirect() {
@@ -129,11 +133,27 @@ function ProtectedRoute({ children }) {
 }
 
 function App() {
+  // Log environment configuration in development
+  if (environment.isDevelopment) {
+    console.log('App Environment:', {
+      mode: environment.mode,
+      apiUrl: environment.api.baseUrl,
+      features: environment.features
+    });
+  }
+
   return (
     <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
+      <ErrorBoundary>
+        <Router
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true
+          }}
+        >
+          <div className="App">
+            <Suspense fallback={<PageLoader message="Loading application..." />}>
+              <Routes>
             <Route path="/" element={<LandingWrapper />} />
             <Route path="/login" element={<LoginWrapper />} />
             <Route path="/signup" element={<Signup />} />
@@ -249,10 +269,47 @@ function App() {
                 </ErrorBoundary>
               } 
             />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </div>
-      </Router>
+                {/* Development/Testing Routes - Only available in development */}
+                {environment.isDevelopment && (
+                  <>
+                    <Route 
+                      path="/simple-distributor" 
+                      element={
+                        <ErrorBoundary>
+                          <ProtectedRoute>
+                            <SimpleDistributorDashboard />
+                          </ProtectedRoute>
+                        </ErrorBoundary>
+                      } 
+                    />
+                    <Route 
+                      path="/test-distributor" 
+                      element={
+                        <ErrorBoundary>
+                          <ProtectedRoute>
+                            <SimpleDistributorTest />
+                          </ProtectedRoute>
+                        </ErrorBoundary>
+                      } 
+                    />
+                    <Route 
+                      path="/test-modern" 
+                      element={
+                        <ErrorBoundary>
+                          <ModernDistributorDashboard />
+                        </ErrorBoundary>
+                      } 
+                    />
+                  </>
+                )}
+                
+                {/* Catch all - redirect to home */}
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </Suspense>
+          </div>
+        </Router>
+      </ErrorBoundary>
     </AuthProvider>
   );
 }

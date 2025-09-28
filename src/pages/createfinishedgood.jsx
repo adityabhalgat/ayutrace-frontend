@@ -43,8 +43,7 @@ export default function CreateFinishedGood() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="flex justify-center mb-6">
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-              <LeafIcon className="h-10 w-10 text-emerald-600" />
-              <span className="text-3xl font-bold text-gray-800">AyuTrace</span>
+              <img src="/Logo (1).png" alt="Logo" className="h-28 w-28 object-contain" />
             </div>
           </div>
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-1">Create Finished Good</h2>
