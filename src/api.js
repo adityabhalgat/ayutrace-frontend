@@ -14,7 +14,7 @@ export async function apiRequest(endpoint, options = {}) {
   console.log('API_BASE_URL:', API_BASE_URL);
   console.log('Making API request to:', url);
   console.log('Request options:', options);
-  
+
   try {
     const response = await fetch(url, {
       headers: {
@@ -24,16 +24,16 @@ export async function apiRequest(endpoint, options = {}) {
       },
       ...options,
     });
-    
+
     console.log('Response status:', response.status);
     console.log('Response ok:', response.ok);
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('API Error:', errorText);
       throw new Error(errorText);
     }
-    
+
     const data = await response.json();
     console.log('API Response:', data);
     return data;
@@ -141,14 +141,14 @@ export function getAllQRCodes() {
 export function uploadDocument(file, documentType, entityType, entityId) {
   token = localStorage.getItem('token');
   const url = `${API_BASE_URL}/api/documents`;
-  
+
   // Create FormData and append the required fields
   const formData = new FormData();
   formData.append('file', file);
   formData.append('documentType', documentType);
   formData.append('entityType', entityType);
   formData.append('entityId', entityId);
-  
+
   return fetch(url, {
     method: 'POST',
     headers: {
@@ -158,13 +158,13 @@ export function uploadDocument(file, documentType, entityType, entityId) {
     body: formData,
   }).then(async response => {
     console.log('Document upload response status:', response.status);
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Document upload error:', errorText);
       throw new Error(errorText);
     }
-    
+
     const data = await response.json();
     console.log('Document upload response:', data);
     return data;
@@ -239,10 +239,10 @@ export function getLabsByType(type = 'LABS') {
 export function uploadAndScanQR(file) {
   token = localStorage.getItem('token');
   const url = `${API_BASE_URL}/api/qr-codes/upload-scan`;
-  
+
   const formData = new FormData();
   formData.append('qrImage', file);
-  
+
   return fetch(url, {
     method: 'POST',
     headers: {
@@ -251,13 +251,13 @@ export function uploadAndScanQR(file) {
     body: formData,
   }).then(async response => {
     console.log('QR upload and scan response status:', response.status);
-    
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('QR upload and scan error:', errorText);
       throw new Error(errorText);
     }
-    
+
     const data = await response.json();
     console.log('QR upload and scan response:', data);
     return data;
@@ -281,7 +281,7 @@ export function getQRCodeBySupplyChainEvent(eventId) {
 export async function downloadCertificate(testId) {
   token = localStorage.getItem('token');
   const url = `${API_BASE_URL}/api/labs/tests/${testId}/certificate/download`;
-  
+
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -289,7 +289,7 @@ export async function downloadCertificate(testId) {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    
+
     if (!response.ok) {
       let errorMessage = 'Failed to download certificate';
       try {
@@ -301,13 +301,13 @@ export async function downloadCertificate(testId) {
       }
       throw new Error(errorMessage);
     }
-    
+
     // Check if the response is actually a PDF
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/pdf')) {
       throw new Error('Invalid response format. Expected PDF file.');
     }
-    
+
     return response.blob();
   } catch (error) {
     console.error('Certificate download error:', error);
@@ -405,3 +405,17 @@ export function scanDistributorQRCode(qrCode) {
     body: JSON.stringify({ qrCode })
   });
 }
+
+// IoT and Spoilage Alert API Functions
+export function getSpoilageAlerts() {
+  return apiRequest('/api/iot/alerts', { method: 'GET' });
+}
+
+export function dismissSpoilageAlert(alertId) {
+  return apiRequest(`/api/iot/alerts/${alertId}/dismiss`, { method: 'POST' });
+}
+
+export function getSensorHistory(batchId) {
+  return apiRequest(`/api/iot/readings/${batchId}`, { method: 'GET' });
+}
+

@@ -5,39 +5,39 @@ import LoginPage from './login';
 
 // --- Custom Hook for Scroll Animations ---
 const useOnScreen = (options) => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        observer.unobserve(entry.target);
-      }
-    }, options);
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                setIsVisible(true);
+                observer.unobserve(entry.target);
+            }
+        }, options);
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
 
-    return () => {
-      if (ref.current) {
-        // Use a variable to avoid issues with the ref being null during cleanup
-        const currentRef = ref.current;
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [ref, options]);
+        return () => {
+            if (ref.current) {
+                // Use a variable to avoid issues with the ref being null during cleanup
+                const currentRef = ref.current;
+                observer.unobserve(currentRef);
+            }
+        };
+    }, [ref, options]);
 
-  return [ref, isVisible];
+    return [ref, isVisible];
 };
 
 // --- SVG Icons ---
 const LeafIcon = ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M17.61,3.47A8.75,8.75,0,0,0,12,2a8.75,8.75,0,0,0-5.61,1.47,8.75,8.75,0,0,0-3.32,12.46l.16.27.17.27,1.6,2.57.17.26.16.25a8.74,8.74,0,0,0,13.34,0l.16-.25.17-.26,1.6-2.57.17-.27.16-.27A8.75,8.75,0,0,0,17.61,3.47ZM12,20.42a6.76,6.76,0,0,1-5.18-2.3l-.15-.24-.15-.24L5,15.07l-.15-.24-.14-.24a6.75,6.75,0,0,1,2.56-9.58,6.75,6.75,0,0,1,9.56,0,6.75,6.75,0,0,1,2.56,9.58l-.14.24-.15.24L19,15.07l-.15.24-.15.24A6.76,6.76,0,0,1,12,20.42Z" />
-    <path d="M12,4.11a6.83,6.83,0,0,0-4,1.62,6.7,6.7,0,0,0,4,11.62,6.7,6.7,0,0,0,4-11.62A6.83,6.83,0,0,0,12,4.11Z" />
-  </svg>
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.61,3.47A8.75,8.75,0,0,0,12,2a8.75,8.75,0,0,0-5.61,1.47,8.75,8.75,0,0,0-3.32,12.46l.16.27.17.27,1.6,2.57.17.26.16.25a8.74,8.74,0,0,0,13.34,0l.16-.25.17-.26,1.6-2.57.17-.27.16-.27A8.75,8.75,0,0,0,17.61,3.47ZM12,20.42a6.76,6.76,0,0,1-5.18-2.3l-.15-.24-.15-.24L5,15.07l-.15-.24-.14-.24a6.75,6.75,0,0,1,2.56-9.58,6.75,6.75,0,0,1,9.56,0,6.75,6.75,0,0,1,2.56,9.58l-.14.24-.15.24L19,15.07l-.15.24-.15.24A6.76,6.76,0,0,1,12,20.42Z" />
+        <path d="M12,4.11a6.83,6.83,0,0,0-4,1.62,6.7,6.7,0,0,0,4,11.62,6.7,6.7,0,0,0,4-11.62A6.83,6.83,0,0,0,12,4.11Z" />
+    </svg>
 );
 const BlockchainIcon = ({ className }) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -93,10 +93,10 @@ const LandingPage = () => {
     const [ctaRef, ctaVisible] = useOnScreen({ threshold: 0.3 });
 
     const features = [
-        { icon: <BlockchainIcon />, title: "Immutable Blockchain Ledger", description: "Every step, from harvest to shelf, is permanently recorded on a tamper-proof ledger, ensuring ultimate data integrity." },
-        { icon: <GeoTagIcon />, title: "Geo-Tagged Provenance", description: "GPS-enabled data capture pinpoints the exact origin of every herb, verifying its source and promoting sustainable harvesting." },
-        { icon: <SmartContractIcon />, title: "Smart Contract Automation", description: "Automated validation of quality, sustainability, and fair-trade practices ensures compliance at every stage of the supply chain." },
-        { icon: <QrCodeIcon />, title: "Consumer Transparency Portal", description: "A simple QR scan on the final product reveals the entire journey, empowering consumers with verifiable proof of authenticity." },
+        { icon: <BlockchainIcon />, title: "Immutable Blockchain Ledger", description: "Every step, from farm to fork, is permanently recorded on a tamper-proof ledger, ensuring ultimate data integrity and freshness verification." },
+        { icon: <GeoTagIcon />, title: "Geo-Tagged Provenance", description: "GPS-enabled data capture pinpoints the exact origin of every product, verifying its source and tracking cold chain compliance." },
+        { icon: <SmartContractIcon />, title: "Smart Contract Automation", description: "Automated validation of temperature, humidity, and handling ensures food safety compliance at every stage of the supply chain." },
+        { icon: <QrCodeIcon />, title: "Consumer Transparency Portal", description: "A simple QR scan on the final product reveals the entire journey, empowering consumers with verifiable proof of freshness." },
     ];
 
     const handleSignupClick = () => {
@@ -132,19 +132,19 @@ const LandingPage = () => {
                 <div className="relative responsive-container z-10 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                     <div className="text-center lg:text-left">
                         <h1 className={`responsive-text-3xl lg:text-6xl xl:text-7xl font-extrabold text-gray-800 mb-4 leading-tight transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                            Authenticity in Every Herb.
+                            Freshness You Can Trust.
                         </h1>
                         <p className={`responsive-text-base md:text-xl max-w-xl mx-auto lg:mx-0 text-gray-600 mb-6 sm:mb-8 transition-all duration-700 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                            Leveraging blockchain to bring unparalleled transparency and trust to the Ayurvedic supply chain. From soil to soul, verified.
+                            Leveraging blockchain to bring unparalleled transparency to perishable food supply chains. Reduce spoilage, prevent losses, from farm to fork.
                         </p>
                         <div className={`flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-3 sm:gap-4 transition-all duration-700 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                            <button 
+                            <button
                                 onClick={() => navigate('/verify')}
                                 className="w-full sm:w-auto bg-emerald-600 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-xl hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                             >
                                 Scan a Product
                             </button>
-                            <button 
+                            <button
                                 onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
                                 className="w-full sm:w-auto bg-white text-emerald-600 font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-xl hover:bg-stone-100 transition-all duration-300 transform hover:scale-105 border border-emerald-200 text-sm sm:text-base"
                             >
@@ -162,9 +162,9 @@ const LandingPage = () => {
             <section id="features" ref={featuresRef} className="section-responsive bg-white">
                 <div className="responsive-container">
                     <div className={`text-center mb-12 sm:mb-16 transition-all duration-700 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                        <h2 className="responsive-text-2xl md:text-4xl font-bold mb-3">The Future of Botanical Integrity</h2>
+                        <h2 className="responsive-text-2xl md:text-4xl font-bold mb-3">The Future of Fresh Food Integrity</h2>
                         <p className="responsive-text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-                            Our platform provides a single source of truth, creating a transparent ecosystem for farmers, manufacturers, and consumers.
+                            Our platform provides a single source of truth, creating a transparent ecosystem for farmers, food processors, and consumers.
                         </p>
                     </div>
                     <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mt-12 sm:mt-16 transition-all duration-700 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
@@ -204,20 +204,20 @@ const LandingPage = () => {
             <section id="get-started" ref={ctaRef} className="bg-gradient-to-br from-emerald-50 via-green-50 to-stone-100 section-responsive">
                 <div className={`responsive-container text-center transition-all duration-1000 ${ctaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
                     <div className="max-w-4xl mx-auto">
-                        <h2 className="responsive-text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">Transform Your Ayurvedic Supply Chain Today</h2>
+                        <h2 className="responsive-text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">Transform Your Perishable Supply Chain Today</h2>
                         <p className="responsive-text-base md:text-xl text-gray-600 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
-                            Join the revolution in traditional medicine authenticity. Experience complete transparency from seed to shelf with our cutting-edge blockchain technology.
+                            Join the revolution in food freshness verification. Experience complete cold chain transparency from farm to fork with our cutting-edge blockchain technology.
                         </p>
-                        
+
                         {/* Enhanced Action Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12">
-                            <button 
+                            <button
                                 onClick={handleSignupClick}
                                 className="w-full sm:w-auto bg-emerald-600 text-white font-bold px-8 py-4 rounded-full shadow-xl hover:bg-emerald-700 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-lg"
                             >
                                 Start Your Journey
                             </button>
-                            <button 
+                            <button
                                 onClick={() => navigate('/verify')}
                                 className="w-full sm:w-auto bg-white text-emerald-600 font-bold px-8 py-4 rounded-full border-2 border-emerald-600 shadow-lg hover:bg-emerald-50 transition-all duration-300 transform hover:scale-105 text-lg"
                             >
@@ -234,7 +234,7 @@ const LandingPage = () => {
                                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Instant Verification</h3>
                                 <p className="text-gray-600 text-sm">Scan any QR code to instantly access the complete product journey and authenticity proof.</p>
                             </div>
-                            
+
                             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-emerald-100 transform hover:scale-105 transition-all duration-300">
                                 <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <BlockchainIcon className="h-8 w-8 text-emerald-600" />
@@ -242,23 +242,23 @@ const LandingPage = () => {
                                 <h3 className="text-lg font-semibold text-gray-800 mb-2">Blockchain Security</h3>
                                 <p className="text-gray-600 text-sm">Immutable records ensure data integrity and prevent tampering throughout the supply chain.</p>
                             </div>
-                            
+
                             <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-emerald-100 transform hover:scale-105 transition-all duration-300">
                                 <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <LeafIcon className="h-8 w-8 text-emerald-600" />
                                 </div>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Sustainable Sourcing</h3>
-                                <p className="text-gray-600 text-sm">Promote ethical harvesting and support local farmers with transparent supply chain tracking.</p>
+                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Reduce Post-Harvest Losses</h3>
+                                <p className="text-gray-600 text-sm">Monitor spoilage risk in real-time and support local farmers with transparent cold chain tracking.</p>
                             </div>
                         </div>
 
                         {/* Trust Indicators */}
                         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-emerald-200">
-                            <p className="text-gray-600 text-sm lg:text-base mb-4">Trusted by leading Ayurvedic manufacturers and distributors</p>
+                            <p className="text-gray-600 text-sm lg:text-base mb-4">Trusted by leading food processors and distributors</p>
                             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-                                <div className="text-gray-400 font-semibold">Manufacturer Partner</div>
-                                <div className="text-gray-400 font-semibold">Lab Certified</div>
-                                <div className="text-gray-400 font-semibold">Distributor Verified</div>
+                                <div className="text-gray-400 font-semibold">Food Processor Partner</div>
+                                <div className="text-gray-400 font-semibold">Quality Inspected</div>
+                                <div className="text-gray-400 font-semibold">Cold Chain Verified</div>
                                 <div className="text-gray-400 font-semibold">Consumer Trusted</div>
                             </div>
                         </div>
@@ -269,7 +269,7 @@ const LandingPage = () => {
             {/* Footer */}
             <footer className="bg-gray-800 text-white py-8">
                 <div className="container mx-auto text-center">
-                    <p>&copy; 2025 Supply Chain Team. Building a transparent future for Ayurveda.</p>
+                    <p>&copy; 2025 FreshTrace. Building a transparent future for fresh food.</p>
                 </div>
             </footer>
         </div>

@@ -159,35 +159,35 @@ export default function ModernAnalyticsSection({ theme }) {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
       >
         {[
-          { 
-            title: 'Total Revenue', 
-            value: '₹4.5L', 
-            change: '+12%', 
-            changeType: 'positive', 
+          {
+            title: 'Total Revenue',
+            value: '₹4.5L',
+            change: '+12%',
+            changeType: 'positive',
             icon: '💰',
             gradient: 'from-green-500 to-emerald-500'
           },
-          { 
-            title: 'Active Shipments', 
-            value: analyticsData?.shipmentPerformance?.totalShipments || '0', 
-            change: '+8%', 
-            changeType: 'positive', 
+          {
+            title: 'Active Shipments',
+            value: analyticsData?.shipmentPerformance?.totalShipments || '0',
+            change: '+8%',
+            changeType: 'positive',
             icon: '🚚',
             gradient: 'from-blue-500 to-cyan-500'
           },
-          { 
-            title: 'Delivery Rate', 
-            value: `${analyticsData?.shipmentPerformance?.deliveryRate || 0}%`, 
-            change: '+2%', 
-            changeType: 'positive', 
+          {
+            title: 'Delivery Rate',
+            value: `${analyticsData?.shipmentPerformance?.deliveryRate || 0}%`,
+            change: '+2%',
+            changeType: 'positive',
             icon: '✅',
             gradient: 'from-purple-500 to-pink-500'
           },
-          { 
-            title: 'Inventory Value', 
-            value: `₹${((analyticsData?.inventorySummary?.totalValue || 0) / 100000).toFixed(1)}L`, 
-            change: '+5%', 
-            changeType: 'positive', 
+          {
+            title: 'Inventory Value',
+            value: `₹${((analyticsData?.inventorySummary?.totalValue || 0) / 100000).toFixed(1)}L`,
+            change: '+5%',
+            changeType: 'positive',
             icon: '📦',
             gradient: 'from-orange-500 to-red-500'
           }
@@ -204,11 +204,10 @@ export default function ModernAnalyticsSection({ theme }) {
               <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${metric.gradient} flex items-center justify-center text-2xl`}>
                 {metric.icon}
               </div>
-              <div className={`text-sm font-medium px-2 py-1 rounded-full ${
-                metric.changeType === 'positive' 
-                  ? 'text-green-600 bg-green-50' 
+              <div className={`text-sm font-medium px-2 py-1 rounded-full ${metric.changeType === 'positive'
+                  ? 'text-green-600 bg-green-50'
                   : 'text-red-600 bg-red-50'
-              }`}>
+                }`}>
                 {metric.change}
               </div>
             </div>
@@ -230,7 +229,7 @@ export default function ModernAnalyticsSection({ theme }) {
           className={`${theme.colors.card} rounded-2xl p-6 ${theme.shadows.soft} border border-gray-200/50`}
         >
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Inventory Analysis</h2>
-          <LineChart 
+          <LineChart
             data={{ value: analyticsData?.inventorySummary?.totalItems }}
             title="Total Items"
             color="from-blue-500 to-cyan-500"
@@ -238,7 +237,7 @@ export default function ModernAnalyticsSection({ theme }) {
           <div className="mt-4 grid grid-cols-3 gap-4 text-center">
             <div>
               <div className="text-2xl font-bold text-green-600">
-                {analyticsData?.inventorySummary?.totalItems - (analyticsData?.inventorySummary?.lowStockItems || 0) - (analyticsData?.inventorySummary?.outOfStockItems || 0)}
+                {(analyticsData?.inventorySummary?.totalItems || 0) - (analyticsData?.inventorySummary?.lowStockItems || 0) - (analyticsData?.inventorySummary?.outOfStockItems || 0)}
               </div>
               <div className="text-xs text-gray-600">In Stock</div>
             </div>
@@ -261,7 +260,7 @@ export default function ModernAnalyticsSection({ theme }) {
           className={`${theme.colors.card} rounded-2xl p-6 ${theme.shadows.soft} border border-gray-200/50`}
         >
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Shipment Performance</h2>
-          <DonutChart 
+          <DonutChart
             data={{ percentage: analyticsData?.shipmentPerformance?.deliveryRate }}
             title="On-time Delivery Rate"
           />
@@ -289,7 +288,7 @@ export default function ModernAnalyticsSection({ theme }) {
           className={`${theme.colors.card} rounded-2xl p-6 ${theme.shadows.soft} border border-gray-200/50`}
         >
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Quality Verification</h2>
-          <BarChart 
+          <BarChart
             data={{ count: analyticsData?.verificationMetrics?.totalVerifications }}
             title="Total Verifications"
             color="from-emerald-500 to-teal-500"
@@ -314,7 +313,7 @@ export default function ModernAnalyticsSection({ theme }) {
           className={`${theme.colors.card} rounded-2xl p-6 ${theme.shadows.soft} border border-gray-200/50`}
         >
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Monthly Trends</h2>
-          <BarChart 
+          <BarChart
             data={{ count: analyticsData?.monthlyTrends?.length || 0 }}
             title="Months of Data"
             color="from-purple-500 to-pink-500"

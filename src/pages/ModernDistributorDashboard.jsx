@@ -83,7 +83,7 @@ export default function ModernDistributorDashboard() {
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileError, setProfileError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const navigate = useNavigate();
 
   // Initialize dashboard
@@ -93,10 +93,10 @@ export default function ModernDistributorDashboard() {
         setIsLoading(true);
         // Add initialization logic here
         console.log('Modern Distributor Dashboard initializing...');
-        
+
         // Simulate initialization (remove timeout in production)
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         console.log('Modern Distributor Dashboard initialized successfully');
         setIsLoading(false);
       } catch (error) {
@@ -104,7 +104,7 @@ export default function ModernDistributorDashboard() {
         setIsLoading(false);
       }
     };
-    
+
     initializeDashboard();
   }, []);
 
@@ -113,7 +113,7 @@ export default function ModernDistributorDashboard() {
     setShowProfile(true);
     setProfileLoading(true);
     setProfileError('');
-    
+
     try {
       const response = await getProfile();
       setProfileData(response);
@@ -155,7 +155,7 @@ export default function ModernDistributorDashboard() {
           <div className="text-center">
             <h3 className="text-xl font-semibold text-red-600 mb-2">Component Error</h3>
             <p className="text-gray-600 mb-4">Failed to load {activeSection} section</p>
-            <button 
+            <button
               onClick={() => setActiveSection('home')}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
@@ -211,9 +211,7 @@ export default function ModernDistributorDashboard() {
       </div>
 
       {/* Main Content Area - Full width on mobile */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${
-        sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
-      } ml-0`}>
+      <div className="flex-1 flex flex-col transition-all duration-300">
         {/* Modern Top Bar */}
         <ModernTopbar
           onProfileClick={handleProfileClick}
@@ -255,7 +253,7 @@ export default function ModernDistributorDashboard() {
 
       {/* Mobile Overlay - Show when sidebar is open on mobile */}
       {!sidebarCollapsed && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-40"
           onClick={() => setSidebarCollapsed(true)}
         />

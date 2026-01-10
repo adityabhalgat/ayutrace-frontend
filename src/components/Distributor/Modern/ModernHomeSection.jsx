@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getDistributorDashboard } from '../../../api';
+import SpoilageAlerts from './SpoilageAlerts';
 
 // Chart component placeholder (would need chart library like Chart.js or Recharts)
 const QuickChart = ({ data, type, color }) => (
@@ -95,10 +96,10 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
   ];
 
   const quickActions = [
-    { 
-      title: 'Add Inventory', 
-      description: 'Add new items to stock', 
-      icon: '📦', 
+    {
+      title: 'Add Inventory',
+      description: 'Add new items to stock',
+      icon: '📦',
       color: 'from-blue-500 to-cyan-500',
       action: () => {
         showNotification('Navigating to Inventory...', 'success');
@@ -107,10 +108,10 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
         }
       }
     },
-    { 
-      title: 'Create Shipment', 
-      description: 'Ship items to customers', 
-      icon: '🚚', 
+    {
+      title: 'Create Shipment',
+      description: 'Ship items to customers',
+      icon: '🚚',
       color: 'from-emerald-500 to-teal-500',
       action: () => {
         showNotification('Navigating to Shipments...', 'success');
@@ -119,10 +120,10 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
         }
       }
     },
-    { 
-      title: 'Scan QR Code', 
-      description: 'Verify product authenticity', 
-      icon: '📱', 
+    {
+      title: 'Scan QR Code',
+      description: 'Verify product authenticity',
+      icon: '📱',
       color: 'from-purple-500 to-pink-500',
       action: () => {
         showNotification('Navigating to Verification...', 'success');
@@ -131,10 +132,10 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
         }
       }
     },
-    { 
-      title: 'View Analytics', 
-      description: 'Check performance metrics', 
-      icon: '📊', 
+    {
+      title: 'View Analytics',
+      description: 'Check performance metrics',
+      icon: '📊',
       color: 'from-orange-500 to-red-500',
       action: () => {
         showNotification('Navigating to Analytics...', 'success');
@@ -173,17 +174,15 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
             exit={{ opacity: 0, y: -50, scale: 0.9 }}
             className="fixed top-4 right-4 z-50 max-w-sm"
           >
-            <div className={`p-4 rounded-lg shadow-lg border ${
-              notification.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
-              notification.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
-              'bg-blue-50 border-blue-200 text-blue-800'
-            }`}>
+            <div className={`p-4 rounded-lg shadow-lg border ${notification.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+                notification.type === 'error' ? 'bg-red-50 border-red-200 text-red-800' :
+                  'bg-blue-50 border-blue-200 text-blue-800'
+              }`}>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${
-                  notification.type === 'success' ? 'bg-green-500' :
-                  notification.type === 'error' ? 'bg-red-500' :
-                  'bg-blue-500'
-                }`}></div>
+                <div className={`w-2 h-2 rounded-full ${notification.type === 'success' ? 'bg-green-500' :
+                    notification.type === 'error' ? 'bg-red-500' :
+                      'bg-blue-500'
+                  }`}></div>
                 <p className="text-sm font-medium">{notification.message}</p>
               </div>
             </div>
@@ -231,19 +230,18 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
               <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${metric.gradient} flex items-center justify-center`}>
                 <span className="text-2xl">
                   {metric.icon === 'CubeIcon' ? '📦' :
-                   metric.icon === 'TruckIcon' ? '🚚' :
-                   metric.icon === 'ShieldIcon' ? '🛡️' : '📊'}
+                    metric.icon === 'TruckIcon' ? '🚚' :
+                      metric.icon === 'ShieldIcon' ? '🛡️' : '📊'}
                 </span>
               </div>
-              <div className={`text-sm font-medium px-2 py-1 rounded-full ${
-                metric.changeType === 'positive' 
-                  ? 'text-green-600 bg-green-50' 
+              <div className={`text-sm font-medium px-2 py-1 rounded-full ${metric.changeType === 'positive'
+                  ? 'text-green-600 bg-green-50'
                   : 'text-red-600 bg-red-50'
-              }`}>
+                }`}>
                 {metric.change}
               </div>
             </div>
-            
+
             <div className="mb-2">
               <h3 className="text-2xl font-bold text-gray-900">{metric.value}</h3>
               <p className="text-gray-600 text-sm font-medium">{metric.title}</p>
@@ -258,7 +256,7 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
                   exit={{ opacity: 0, height: 0 }}
                   className="mt-4 pt-4 border-t border-gray-200"
                 >
-                  <QuickChart 
+                  <QuickChart
                     data={{ value: metric.value, label: 'Trend' }}
                     color={metric.gradient}
                   />
@@ -268,6 +266,9 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
           </motion.div>
         ))}
       </div>
+
+      {/* IoT Sensor Alerts - Prominent placement */}
+      <SpoilageAlerts theme={theme} />
 
       {/* Quick Actions & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -318,7 +319,7 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
               View all
             </button>
           </div>
-          
+
           <div className="space-y-4">
             {(dashboardData?.recentShipments || []).slice(0, 5).map((shipment, index) => (
               <motion.div
@@ -328,10 +329,9 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
                 transition={{ delay: index * 0.1 }}
                 className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
               >
-                <div className={`w-3 h-3 rounded-full ${
-                  shipment.status === 'DELIVERED' ? 'bg-green-500' :
-                  shipment.status === 'PENDING' ? 'bg-yellow-500' : 'bg-blue-500'
-                }`}></div>
+                <div className={`w-3 h-3 rounded-full ${shipment.status === 'DELIVERED' ? 'bg-green-500' :
+                    shipment.status === 'PENDING' ? 'bg-yellow-500' : 'bg-blue-500'
+                  }`}></div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-900">
                     Shipment #{shipment.shipmentNumber} to {shipment.recipientName}
@@ -374,7 +374,7 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
               Total Shipments
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -388,7 +388,7 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
               This Month
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -402,7 +402,7 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
               Low Stock Items
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

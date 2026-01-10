@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  getDistributorInventory, 
-  addInventoryItem, 
+import {
+  getDistributorInventory,
+  addInventoryItem,
   updateInventoryItem,
   scanDistributorQRCode
 } from '../../../api';
@@ -14,7 +14,7 @@ const ModernTable = ({ data, columns, onEdit, onDelete, loading }) => {
 
   const sortedData = React.useMemo(() => {
     if (!sortConfig.key) return data;
-    
+
     return [...data].sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === 'asc' ? -1 : 1;
@@ -187,7 +187,7 @@ export default function ModernInventorySection({ theme }) {
       setError('');
       const response = await getDistributorInventory();
       console.log('Inventory API Response:', response);
-      
+
       // Handle the correct backend response structure
       if (response && response.success && response.data) {
         const inventoryData = response.data.inventory || [];
@@ -208,27 +208,27 @@ export default function ModernInventorySection({ theme }) {
           entityId: 'batch-001',
           quantity: 150,
           unit: 'KG',
-          location: 'Warehouse A-1',
+          location: 'Cold Storage A-1',
           status: 'IN_STOCK',
           receivedDate: new Date().toISOString(),
           expiryDate: '2025-06-15',
-          supplierInfo: { name: 'Himalayan Herbs Ltd' },
-          qualityNotes: 'Premium quality',
-          storageConditions: 'Cool, dry place'
+          supplierInfo: { name: 'Fresh Farms Cooperative' },
+          qualityNotes: 'Premium quality - Fresh harvest',
+          storageConditions: 'Refrigerated (2-8°C)'
         },
         {
           inventoryId: 2,
           productType: 'FINISHED_GOOD',
           entityId: 'product-002',
           quantity: 75,
-          unit: 'BOTTLES',
+          unit: 'BOXES',
           location: 'Warehouse B-2',
           status: 'LOW_STOCK',
           receivedDate: new Date().toISOString(),
           expiryDate: '2025-08-20',
-          supplierInfo: { name: 'Ayurvedic Solutions Inc' },
-          qualityNotes: 'Quality tested',
-          storageConditions: 'Room temperature'
+          supplierInfo: { name: 'Organic Produce Co.' },
+          qualityNotes: 'Quality inspected - Grade A',
+          storageConditions: 'Cool, dry place (15-25°C)'
         }
       ]);
     } finally {
@@ -243,30 +243,30 @@ export default function ModernInventorySection({ theme }) {
         alert('Entity ID is required');
         return;
       }
-      
+
       // Validate UUID format for entityId
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(newItem.entityId)) {
         alert('Entity ID must be a valid UUID format. Please scan a valid QR code or enter a proper UUID.');
         return;
       }
-      
+
       if (!newItem.quantity || newItem.quantity <= 0) {
         alert('Quantity must be greater than 0');
         return;
       }
-      
+
       if (!newItem.location.trim()) {
         alert('Location is required');
         return;
       }
-      
+
       console.log('Sending inventory item data:', newItem);
-      
+
       const response = await addInventoryItem(newItem);
       setInventory(prev => [...prev, response.data || response]);
       setShowAddModal(false);
-      setNewItem({ 
+      setNewItem({
         productType: 'RAW_MATERIAL_BATCH',
         entityId: '',
         quantity: '',
@@ -280,7 +280,7 @@ export default function ModernInventorySection({ theme }) {
       });
     } catch (err) {
       console.error('Add item error:', err);
-      
+
       // Extract more detailed error message if available
       let errorMessage = 'Failed to add item';
       if (err.response && err.response.data) {
@@ -288,7 +288,7 @@ export default function ModernInventorySection({ theme }) {
           errorMessage = err.response.data.message;
         }
         if (err.response.data.errors && Array.isArray(err.response.data.errors)) {
-          const fieldErrors = err.response.data.errors.map(error => 
+          const fieldErrors = err.response.data.errors.map(error =>
             `${error.field}: ${error.message}`
           ).join('\n');
           errorMessage += '\n\nField errors:\n' + fieldErrors;
@@ -296,7 +296,7 @@ export default function ModernInventorySection({ theme }) {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       alert(errorMessage);
     }
   };
@@ -313,11 +313,11 @@ export default function ModernInventorySection({ theme }) {
         qualityNotes: editingItem.qualityNotes,
         storageConditions: editingItem.storageConditions
       };
-      
+
       console.log('Sending update data:', updateData);
-      
+
       const response = await updateInventoryItem(editingItem.inventoryId, updateData);
-      setInventory(prev => prev.map(item => 
+      setInventory(prev => prev.map(item =>
         item.inventoryId === editingItem.inventoryId ? { ...item, ...updateData } : item
       ));
       setEditingItem(null);
@@ -331,7 +331,7 @@ export default function ModernInventorySection({ theme }) {
   const handleQRScan = (qrCode) => {
     console.log('QR Code scanned:', qrCode);
     setShowQRScanner(false);
-    
+
     if (qrScanTarget === 'add') {
       // Use scanned QR code as entity ID for new item
       setNewItem(prev => ({ ...prev, entityId: qrCode }));
@@ -339,7 +339,7 @@ export default function ModernInventorySection({ theme }) {
       // Search for items with this entity ID
       setSearchTerm(qrCode);
     }
-    
+
     setQrScanTarget('');
   };
 
@@ -350,11 +350,11 @@ export default function ModernInventorySection({ theme }) {
 
   const filteredInventory = (Array.isArray(inventory) ? inventory : []).filter(item => {
     const matchesSearch = item.entityId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.productType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.location?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+      item.productType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.location?.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchesFilter = filterStatus === 'all' || item.status === filterStatus;
-    
+
     return matchesSearch && matchesFilter;
   });
 
@@ -374,10 +374,9 @@ export default function ModernInventorySection({ theme }) {
       label: 'Quantity',
       render: (value, item) => (
         <div className="flex items-center space-x-2">
-          <span className={`font-medium ${
-            value === 0 ? 'text-red-600' :
-            value < 100 ? 'text-yellow-600' : 'text-green-600'
-          }`}>
+          <span className={`font-medium ${value === 0 ? 'text-red-600' :
+              value < 100 ? 'text-yellow-600' : 'text-green-600'
+            }`}>
             {value}
           </span>
           <span className="text-sm text-gray-500">{item.unit}</span>
@@ -400,15 +399,14 @@ export default function ModernInventorySection({ theme }) {
       key: 'status',
       label: 'Status',
       render: (value) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-          value === 'IN_STOCK' ? 'bg-green-100 text-green-800' :
-          value === 'LOW_STOCK' ? 'bg-yellow-100 text-yellow-800' :
-          value === 'OUT_OF_STOCK' ? 'bg-red-100 text-red-800' :
-          value === 'RESERVED' ? 'bg-blue-100 text-blue-800' :
-          value === 'DAMAGED' ? 'bg-orange-100 text-orange-800' :
-          value === 'EXPIRED' ? 'bg-purple-100 text-purple-800' :
-          'bg-gray-100 text-gray-800'
-        }`}>
+        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${value === 'IN_STOCK' ? 'bg-green-100 text-green-800' :
+            value === 'LOW_STOCK' ? 'bg-yellow-100 text-yellow-800' :
+              value === 'OUT_OF_STOCK' ? 'bg-red-100 text-red-800' :
+                value === 'RESERVED' ? 'bg-blue-100 text-blue-800' :
+                  value === 'DAMAGED' ? 'bg-orange-100 text-orange-800' :
+                    value === 'EXPIRED' ? 'bg-purple-100 text-purple-800' :
+                      'bg-gray-100 text-gray-800'
+          }`}>
           {value.replace('_', ' ')}
         </span>
       )
@@ -457,7 +455,7 @@ export default function ModernInventorySection({ theme }) {
             </svg>
             <span>Scan to Search</span>
           </motion.button>
-          
+
           {/* Add Item Button */}
           <motion.button
             type="button"
@@ -554,7 +552,7 @@ export default function ModernInventorySection({ theme }) {
             </div>
           </div>
         </div>
-        
+
         <ModernTable
           data={filteredInventory}
           columns={columns}
@@ -660,7 +658,7 @@ export default function ModernInventorySection({ theme }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30"
             />
           </div>
-          
+
           {/* Quality Notes Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Quality Notes <span className="text-red-500">*</span></label>
@@ -684,7 +682,7 @@ export default function ModernInventorySection({ theme }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
             />
           </div>
-          
+
           {/* Storage Conditions Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Storage Conditions <span className="text-red-500">*</span></label>
@@ -709,7 +707,7 @@ export default function ModernInventorySection({ theme }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
             />
           </div>
-          
+
           <div className="flex justify-end space-x-3 pt-4">
             <button
               onClick={() => setShowAddModal(false)}
@@ -765,7 +763,7 @@ export default function ModernInventorySection({ theme }) {
                 <option value="OUT_OF_STOCK">Out of Stock</option>
               </select>
             </div>
-            
+
             {/* Quality Notes Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Quality Notes</label>
@@ -777,7 +775,7 @@ export default function ModernInventorySection({ theme }) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
               />
             </div>
-            
+
             {/* Storage Conditions Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Storage Conditions</label>
@@ -789,7 +787,7 @@ export default function ModernInventorySection({ theme }) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
               />
             </div>
-            
+
             <div className="flex justify-end space-x-3 pt-4">
               <button
                 onClick={() => setEditingItem(null)}
