@@ -15,8 +15,7 @@ const CheckBlockchainComponent = () => {
             actor: 'Green Valley Farms',
             timestamp: '2024-09-15 10:30:25',
             details: 'Added 500kg of Organic Turmeric to the supply chain. Quality grade: Premium',
-            status: 'confirmed',
-            icon: '🌱'
+            status: 'confirmed'
         },
         {
             id: 'block_002',
@@ -24,8 +23,7 @@ const CheckBlockchainComponent = () => {
             actor: 'Swift Transport Co.',
             timestamp: '2024-09-15 14:45:12',
             details: 'Raw materials collected and transported to manufacturing facility. Temperature maintained at 15°C',
-            status: 'confirmed',
-            icon: '🚛'
+            status: 'confirmed'
         },
         {
             id: 'block_003',
@@ -33,8 +31,7 @@ const CheckBlockchainComponent = () => {
             actor: 'AyurTest Labs',
             timestamp: '2024-09-16 09:15:30',
             details: 'Conducted comprehensive quality tests. Purity: 98.5%, Heavy metals: Within limits',
-            status: 'confirmed',
-            icon: '🔬'
+            status: 'confirmed'
         },
         {
             id: 'block_004',
@@ -42,8 +39,7 @@ const CheckBlockchainComponent = () => {
             actor: 'AyuMed Pharmaceuticals',
             timestamp: '2024-09-16 11:20:45',
             details: 'Production batch AYU-2024-001 initiated. Expected completion: 3 days',
-            status: 'in-progress',
-            icon: '🏭'
+            status: 'in-progress'
         },
         {
             id: 'block_005',
@@ -51,8 +47,7 @@ const CheckBlockchainComponent = () => {
             actor: 'AyuMed Pharmaceuticals',
             timestamp: '2024-09-18 16:30:15',
             details: 'Generated 1000 unique QR codes for finished products. Batch: AYU-2024-001',
-            status: 'confirmed',
-            icon: '📱'
+            status: 'confirmed'
         },
         {
             id: 'block_006',
@@ -60,8 +55,7 @@ const CheckBlockchainComponent = () => {
             actor: 'AyuMed Pharmaceuticals',
             timestamp: '2024-09-19 08:45:20',
             details: 'Products packaged and ready for distribution. Total units: 1000',
-            status: 'confirmed',
-            icon: '📦'
+            status: 'confirmed'
         },
         {
             id: 'block_007',
@@ -69,8 +63,7 @@ const CheckBlockchainComponent = () => {
             actor: 'MediDistribute Network',
             timestamp: '2024-09-19 13:22:10',
             details: 'Products dispatched to 15 retail outlets across the region',
-            status: 'in-progress',
-            icon: '🚚'
+            status: 'in-progress'
         }
     ];
 
@@ -162,7 +155,6 @@ const CheckBlockchainComponent = () => {
             <div className="relative mb-8 sm:mb-12 text-center">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-500 to-emerald-600 opacity-75 blur-3xl rounded-full transform animate-pulse"></div>
                 <div className="relative">
-                    <div className="text-4xl sm:text-5xl lg:text-6xl mb-4 animate-bounce">⛓️</div>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-emerald-600 bg-clip-text text-transparent mb-4 animate-fade-in">
                         Blockchain Ledger
                     </h2>
@@ -176,7 +168,6 @@ const CheckBlockchainComponent = () => {
             {/* Stats Section */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
                 <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-lg border border-gray-200 transform transition-all duration-500 hover:scale-105 hover:shadow-xl animate-fade-in">
-                    <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">📊</div>
                     <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1 sm:mb-2">
                         {animatedCount}
                     </div>
@@ -184,7 +175,6 @@ const CheckBlockchainComponent = () => {
                 </div>
                 
                 <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-lg border border-gray-200 transform transition-all duration-500 hover:scale-105 hover:shadow-xl animate-fade-in" style={{animationDelay: '200ms'}}>
-                    <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">✅</div>
                     <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1 sm:mb-2">
                         {blockchain.filter(b => b.status === 'confirmed').length}
                     </div>
@@ -192,7 +182,6 @@ const CheckBlockchainComponent = () => {
                 </div>
                 
                 <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-lg border border-gray-200 transform transition-all duration-500 hover:scale-105 hover:shadow-xl animate-fade-in" style={{animationDelay: '400ms'}}>
-                    <div className="text-2xl sm:text-3xl mb-2 sm:mb-3">🔄</div>
                     <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1 sm:mb-2">
                         {blockchain.filter(b => b.status === 'in-progress').length}
                     </div>
@@ -239,9 +228,6 @@ const CheckBlockchainComponent = () => {
                                     {/* Header */}
                                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
                                         <div className="flex items-center space-x-3 mb-2 sm:mb-0">
-                                            <div className="text-2xl sm:text-3xl transform group-hover:scale-110 transition-transform duration-300">
-                                                {transaction.icon}
-                                            </div>
                                             <div>
                                                 <h4 className="text-lg sm:text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                                                     {transaction.type}

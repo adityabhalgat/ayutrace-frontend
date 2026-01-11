@@ -7,17 +7,51 @@ import YourTests from './YourTests';
 import AddTests from './AddTests';
 import LabsVerify from './LabsVerify';
 import LabsBlockchain from './LabsBlockchain';
+import ProfileModal from '../Modals/ProfileModal';
+import { getUserProfile } from '../../api';
 
 const LabsDashboard = () => {
     const [activeTab, setActiveTab] = useState('home');
     const { user, logout } = useAuth();
+    
+    // Profile modal state
+    const [showProfile, setShowProfile] = useState(false);
+    const [profileLoading, setProfileLoading] = useState(false);
+    const [profileError, setProfileError] = useState(null);
+    const [profileData, setProfileData] = useState(null);
+
+    const handleProfileClick = async () => {
+        setShowProfile(true);
+        setProfileLoading(true);
+        setProfileError(null);
+        
+        try {
+            const response = await getUserProfile();
+            if (response.success) {
+                setProfileData(response);
+            } else {
+                setProfileError(response.message || 'Failed to load profile');
+            }
+        } catch (err) {
+            console.error('Error fetching profile:', err);
+            setProfileError('Failed to load profile data');
+        } finally {
+            setProfileLoading(false);
+        }
+    };
+
+    const closeProfile = () => {
+        setShowProfile(false);
+        setProfileData(null);
+        setProfileError(null);
+    };
 
     const navItems = [
-        { id: 'home', label: 'Home', icon: '🏠' },
-        { id: 'your-tests', label: 'Your Tests', icon: '🧪' },
-        { id: 'verify', label: 'Verify', icon: '✅' },
-        { id: 'add-tests', label: 'Add Tests', icon: '➕' },
-        { id: 'blockchain', label: 'Blockchain', icon: '⛓️' }
+        { id: 'home', label: 'Home', icon: '' },
+        { id: 'your-tests', label: 'Your Tests', icon: '' },
+        { id: 'verify', label: 'Verify', icon: '' },
+        { id: 'add-tests', label: 'Add Tests', icon: '' },
+        { id: 'blockchain', label: 'Blockchain', icon: '' },
     ];
 
     const renderContent = () => {
@@ -63,34 +97,31 @@ const LabsDashboard = () => {
                                 </p>
                             </div>
                             
-                            {/* User Profile Dropdown */}
-                            <div className="relative group">
-                                <button className="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                                    <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
-                                        <span className="text-white font-bold text-lg">
-                                            {user?.firstName?.[0]?.toUpperCase() || '🔬'}
-                                        </span>
-                                    </div>
-                                    <div className="text-left">
-                                        <p className="text-sm font-medium">
-                                            {user?.firstName} {user?.lastName}
-                                        </p>
-                                        <p className="text-xs text-gray-500">{user?.email}</p>
-                                    </div>
-                                </button>
-                                
-                                {/* Dropdown Menu */}
-                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                    <div className="py-2">
-                                        <button 
-                                            onClick={logout}
-                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            🚪 Logout
-                                        </button>
-                                    </div>
+                            {/* User Profile */}
+                            <div 
+                                className="flex items-center space-x-2 text-gray-700 cursor-pointer hover:bg-cyan-50 p-2 rounded-lg transition-all" 
+                                onClick={handleProfileClick}
+                            >
+                                <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
+                                    <span className="text-white font-bold text-lg">
+                                        {user?.firstName?.[0]?.toUpperCase() || 'L'}
+                                    </span>
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-sm font-medium">
+                                        {user?.firstName} {user?.lastName}
+                                    </p>
+                                    <p className="text-xs text-gray-500">{user?.email}</p>
                                 </div>
                             </div>
+
+                            {/* Logout Button */}
+                            <button
+                                onClick={logout}
+                                className="text-gray-700 hover:text-red-600 transition-all duration-200 rounded-md hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 font-medium text-sm px-3 py-1.5"
+                            >
+                                Logout
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -110,7 +141,6 @@ const LabsDashboard = () => {
                                         : 'text-gray-600 hover:text-cyan-600 hover:bg-cyan-50'
                                 }`}
                             >
-                                <span className="text-lg">{item.icon}</span>
                                 <span>{item.label}</span>
                             </button>
                         ))}
@@ -124,6 +154,15 @@ const LabsDashboard = () => {
                     {renderContent()}
                 </LabsProvider>
             </div>
+
+            {/* Profile Modal */}
+            <ProfileModal 
+                show={showProfile}
+                onClose={closeProfile}
+                loading={profileLoading}
+                error={profileError}
+                profileData={profileData}
+            />
         </div>
     );
 };

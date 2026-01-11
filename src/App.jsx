@@ -15,7 +15,7 @@ const ManufacturerDashboard = lazy(() => import('./pages/manudash-modular'));
 const CheckerDash = lazy(() => import('./pages/checkdash'));
 const DistributorDashboard = lazy(() => import('./pages/DistributorDashboard'));
 const SimpleDistributorDashboard = lazy(() => import('./pages/SimpleDistributorDashboard'));
-const SimpleDistributorTest = lazy(() => import('./pages/SimpleDistributorTest'));
+
 const ModernDistributorDashboard = lazy(() => import('./pages/ModernDistributorDashboard'));
 const LabsDashboard = lazy(() => import('./components/Labs/LabsDashboard'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
@@ -24,16 +24,16 @@ const VerifyPage = lazy(() => import('./pages/verify'));
 // Dashboard redirect based on user role
 function DashboardRedirect() {
   const { user } = useAuth();
-  
+
   console.log('DashboardRedirect - User object:', user);
-  
+
   if (!user) {
     console.log('DashboardRedirect - No user, redirecting to landing');
     return <Navigate to="/" />;
   }
-  
+
   console.log('DashboardRedirect - User orgType:', user.orgType);
-  
+
   // Redirect based on organization type
   switch (user.orgType) {
     case 'MANUFACTURER':
@@ -63,7 +63,7 @@ function DashboardRedirect() {
 // Landing page wrapper that redirects authenticated users to dashboard
 function LandingWrapper() {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -74,12 +74,12 @@ function LandingWrapper() {
       </div>
     );
   }
-  
+
   // If user is authenticated, redirect to their dashboard
   if (user) {
     return <DashboardRedirect />;
   }
-  
+
   // If not authenticated, show landing page
   return <Landing />;
 }
@@ -87,7 +87,7 @@ function LandingWrapper() {
 // Login page wrapper that redirects authenticated users to dashboard
 function LoginWrapper() {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -98,20 +98,20 @@ function LoginWrapper() {
       </div>
     );
   }
-  
+
   // If user is authenticated, redirect to their dashboard
   if (user) {
     return <DashboardRedirect />;
   }
-  
+
   // If not authenticated, show login page
   return <Login />;
 }
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  
+
   console.log('ProtectedRoute - Loading:', loading, 'User:', user);
-  
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -122,12 +122,12 @@ function ProtectedRoute({ children }) {
       </div>
     );
   }
-  
+
   if (!user) {
     console.log('ProtectedRoute - No user, redirecting to landing');
     return <Navigate to="/" />;
   }
-  
+
   console.log('ProtectedRoute - User authenticated, rendering children');
   return children;
 }
@@ -154,155 +154,136 @@ function App() {
           <div className="App">
             <Suspense fallback={<PageLoader message="Loading application..." />}>
               <Routes>
-            <Route path="/" element={<LandingWrapper />} />
-            <Route path="/login" element={<LoginWrapper />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/verify" element={<VerifyPage />} />
-            <Route path="/create-organization" element={<CreateOrganization />} />
-            <Route path="/dashboard" element={<DashboardRedirect />} />
-            <Route 
-              path="/manudash" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <ManufacturerDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
+                <Route path="/" element={<LandingWrapper />} />
+                <Route path="/login" element={<LoginWrapper />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/verify" element={<VerifyPage />} />
+                <Route path="/create-organization" element={<CreateOrganization />} />
+                <Route path="/dashboard" element={<DashboardRedirect />} />
+                <Route
+                  path="/manudash"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <ManufacturerDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
 
 
-            {/* this is for the labs */}
-            <Route 
-              path="/checkdash" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <CheckerDash />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* this is for the labs dashboard */}
-            <Route 
-              path="/labs-dashboard" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <LabsDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* this is for the distributors - Modern Full Featured Version */}
-            <Route 
-              path="/distributordash" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <ModernDistributorDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* Test simple component */}
-            <Route 
-              path="/distributordash-test" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <SimpleDistributorTest />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* Simple distributor dashboard */}
-            <Route 
-              path="/distributordash-simple" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <SimpleDistributorDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* Modern distributor dashboard */}
-            <Route 
-              path="/distributordash-modern" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <ModernDistributorDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* Test modern without protection (for debugging) */}
-            <Route 
-              path="/test-modern" 
-              element={
-                <ErrorBoundary>
-                  <ModernDistributorDashboard />
-                </ErrorBoundary>
-              } 
-            />
-            {/* Legacy distributor dashboard */}
-            <Route 
-              path="/distributordash-legacy" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <DistributorDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
-            {/* Placeholder for admin dashboard */}
-            <Route 
-              path="/admin-dashboard" 
-              element={
-                <ErrorBoundary>
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                </ErrorBoundary>
-              } 
-            />
+                {/* this is for the labs */}
+                <Route
+                  path="/checkdash"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <CheckerDash />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
+                {/* this is for the labs dashboard */}
+                <Route
+                  path="/labs-dashboard"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <LabsDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
+                {/* this is for the distributors - Modern Full Featured Version */}
+                <Route
+                  path="/distributordash"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <ModernDistributorDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
+
+                {/* Simple distributor dashboard */}
+                <Route
+                  path="/distributordash-simple"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <SimpleDistributorDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
+                {/* Modern distributor dashboard */}
+                <Route
+                  path="/distributordash-modern"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <ModernDistributorDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
+                {/* Test modern without protection (for debugging) */}
+                <Route
+                  path="/test-modern"
+                  element={
+                    <ErrorBoundary>
+                      <ModernDistributorDashboard />
+                    </ErrorBoundary>
+                  }
+                />
+                {/* Legacy distributor dashboard */}
+                <Route
+                  path="/distributordash-legacy"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <DistributorDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
+                {/* Placeholder for admin dashboard */}
+                <Route
+                  path="/admin-dashboard"
+                  element={
+                    <ErrorBoundary>
+                      <ProtectedRoute>
+                        <AdminDashboard />
+                      </ProtectedRoute>
+                    </ErrorBoundary>
+                  }
+                />
                 {/* Development/Testing Routes - Only available in development */}
                 {environment.isDevelopment && (
                   <>
-                    <Route 
-                      path="/simple-distributor" 
+                    <Route
+                      path="/simple-distributor"
                       element={
                         <ErrorBoundary>
                           <ProtectedRoute>
                             <SimpleDistributorDashboard />
                           </ProtectedRoute>
                         </ErrorBoundary>
-                      } 
+                      }
                     />
-                    <Route 
-                      path="/test-distributor" 
-                      element={
-                        <ErrorBoundary>
-                          <ProtectedRoute>
-                            <SimpleDistributorTest />
-                          </ProtectedRoute>
-                        </ErrorBoundary>
-                      } 
-                    />
-                    <Route 
-                      path="/test-modern" 
+
+                    <Route
+                      path="/test-modern"
                       element={
                         <ErrorBoundary>
                           <ModernDistributorDashboard />
                         </ErrorBoundary>
-                      } 
+                      }
                     />
                   </>
                 )}
-                
+
                 {/* Catch all - redirect to home */}
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>

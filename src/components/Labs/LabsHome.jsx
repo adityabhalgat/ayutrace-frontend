@@ -8,7 +8,7 @@ const LabsHome = () => {
     const [error, setError] = useState('');
     
     // Navigation context
-    const { goToAddTests, goToYourTests, goToVerify } = useLabsNavigation();
+    const { goToAddTests, goToYourTests, goToVerify, goToBlockchain } = useLabsNavigation();
 
     useEffect(() => {
         fetchDashboardData();
@@ -135,7 +135,7 @@ const LabsHome = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-100">
                 <div className="text-center">
-                    <div className="text-red-500 text-6xl mb-4">⚠️</div>
+                    <div className="text-red-500 text-lg font-semibold mb-4">Error</div>
                     <p className="text-lg text-red-600 mb-4">{error}</p>
                     <button 
                         onClick={fetchDashboardData}
@@ -165,7 +165,6 @@ const LabsHome = () => {
                                 <p className="text-sm font-medium text-gray-600">Total Tests</p>
                                 <p className="text-3xl font-bold text-gray-900">{dashboardData?.totalTests || 0}</p>
                             </div>
-                            <div className="text-4xl text-blue-500">🧪</div>
                         </div>
                     </div>
 
@@ -175,7 +174,6 @@ const LabsHome = () => {
                                 <p className="text-sm font-medium text-gray-600">Pending Tests</p>
                                 <p className="text-3xl font-bold text-gray-900">{dashboardData?.pendingTests || 0}</p>
                             </div>
-                            <div className="text-4xl text-yellow-500">⏳</div>
                         </div>
                     </div>
 
@@ -185,7 +183,6 @@ const LabsHome = () => {
                                 <p className="text-sm font-medium text-gray-600">Completed Tests</p>
                                 <p className="text-3xl font-bold text-gray-900">{dashboardData?.completedTests || 0}</p>
                             </div>
-                            <div className="text-4xl text-green-500">✅</div>
                         </div>
                     </div>
 
@@ -195,7 +192,6 @@ const LabsHome = () => {
                                 <p className="text-sm font-medium text-gray-600">Certificates Issued</p>
                                 <p className="text-3xl font-bold text-gray-900">{dashboardData?.certificatesIssued || 0}</p>
                             </div>
-                            <div className="text-4xl text-purple-500">📜</div>
                         </div>
                     </div>
                 </div>
@@ -204,7 +200,6 @@ const LabsHome = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                     <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                            <span className="text-3xl mr-3">⚡</span>
                             Quick Actions
                         </h2>
                         <div className="grid grid-cols-2 gap-4">
@@ -212,25 +207,21 @@ const LabsHome = () => {
                                 onClick={goToAddTests}
                                 className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg"
                             >
-                                <span className="text-2xl">➕</span>
                                 <span className="font-medium">Add Test</span>
                             </button>
                             <button 
                                 onClick={goToYourTests}
                                 className="flex items-center space-x-3 p-4 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg hover:from-green-600 hover:to-teal-700 transition-all duration-200 shadow-lg"
                             >
-                                <span className="text-2xl">📋</span>
                                 <span className="font-medium">View Tests</span>
                             </button>
                             <button 
                                 onClick={goToVerify}
                                 className="flex items-center space-x-3 p-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-lg hover:from-purple-600 hover:to-pink-700 transition-all duration-200 shadow-lg"
                             >
-                                <span className="text-2xl">🔍</span>
                                 <span className="font-medium">Verify</span>
                             </button>
                             <button className="flex items-center space-x-3 p-4 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-200 shadow-lg">
-                                <span className="text-2xl">📊</span>
                                 <span className="font-medium">Reports</span>
                             </button>
                         </div>
@@ -238,7 +229,6 @@ const LabsHome = () => {
 
                     <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                            <span className="text-3xl mr-3">📈</span>
                             Monthly Overview
                         </h2>
                         <div className="space-y-4">
@@ -263,7 +253,6 @@ const LabsHome = () => {
                     {/* Recent Tests */}
                     <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                            <span className="text-3xl mr-3">🔬</span>
                             Recent Tests
                         </h2>
                         <div className="space-y-4">
@@ -293,7 +282,6 @@ const LabsHome = () => {
                     {/* Pending Verifications */}
                     <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                            <span className="text-3xl mr-3">⏰</span>
                             Pending Verifications
                         </h2>
                         <div className="space-y-4">
@@ -325,16 +313,19 @@ const LabsHome = () => {
                 <div className="mt-8">
                     <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                            <span className="text-3xl mr-3">🔧</span>
                             Additional Tools
                         </h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <button className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg">
-                                <span className="text-2xl">📊</span>
+                            <button 
+                                onClick={goToYourTests}
+                                className="flex items-center space-x-3 p-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg"
+                            >
                                 <span className="font-medium">Generate Report</span>
                             </button>
-                            <button className="flex items-center space-x-3 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:from-orange-600 hover:to-red-700 transition-all duration-200 shadow-lg">
-                                <span className="text-2xl">⛓️</span>
+                            <button 
+                                onClick={goToBlockchain}
+                                className="flex items-center space-x-3 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-lg hover:from-orange-600 hover:to-red-700 transition-all duration-200 shadow-lg"
+                            >
                                 <span className="font-medium">Blockchain</span>
                             </button>
                         </div>

@@ -146,13 +146,8 @@ const OrganizationManagementSection = () => {
     };
 
     const getOrgTypeIcon = (type) => {
-        const icons = {
-            FARMER: '🌱',
-            MANUFACTURER: '🏭',
-            LABS: '🧪',
-            DISTRIBUTOR: '🚚'
-        };
-        return icons[type] || '🏢';
+        // Returns empty string - icons removed
+        return '';
     };
 
     return (
@@ -225,7 +220,6 @@ const OrganizationManagementSection = () => {
                             <div className="p-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center space-x-3">
-                                        <div className="text-3xl">{getOrgTypeIcon(org.type)}</div>
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-900">{org.type}</h3>
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${

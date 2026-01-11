@@ -23,18 +23,26 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
 
     const fetchAlerts = async () => {
         try {
+            console.log('[SpoilageAlerts] Fetching alerts...');
             const response = await getSpoilageAlerts();
+            console.log('[SpoilageAlerts] API Response:', response);
+            
             if (response?.success && response?.data?.alerts) {
+                console.log('[SpoilageAlerts] Found alerts:', response.data.alerts.length);
+                setAlerts(response.data.alerts);
+            } else if (response?.data?.alerts) {
+                console.log('[SpoilageAlerts] Found alerts (no success flag):', response.data.alerts.length);
                 setAlerts(response.data.alerts);
             } else {
+                console.log('[SpoilageAlerts] No alerts in response');
                 setAlerts([]);
             }
             setError(null);
         } catch (err) {
-            console.error('Failed to fetch spoilage alerts:', err);
-            // Don't show error for non-critical polling
+            console.error('[SpoilageAlerts] Failed to fetch alerts:', err);
+            // Show error for first fetch, but not for polling
             if (!alerts.length) {
-                setError('Unable to fetch alerts');
+                setError('Unable to load alerts. Please check your connection.');
             }
         } finally {
             setLoading(false);
@@ -55,28 +63,28 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
             case 'CRITICAL':
                 return {
                     bg: 'bg-red-50 border-red-300',
-                    icon: '🔴',
+                    iconColor: 'text-red-600',
                     badge: 'bg-red-100 text-red-800 border-red-200',
                     text: 'text-red-800'
                 };
             case 'HIGH':
                 return {
                     bg: 'bg-orange-50 border-orange-300',
-                    icon: '🟠',
+                    iconColor: 'text-orange-600',
                     badge: 'bg-orange-100 text-orange-800 border-orange-200',
                     text: 'text-orange-800'
                 };
             case 'MEDIUM':
                 return {
                     bg: 'bg-yellow-50 border-yellow-300',
-                    icon: '🟡',
+                    iconColor: 'text-yellow-600',
                     badge: 'bg-yellow-100 text-yellow-800 border-yellow-200',
                     text: 'text-yellow-800'
                 };
             default:
                 return {
                     bg: 'bg-blue-50 border-blue-300',
-                    icon: '🔵',
+                    iconColor: 'text-blue-600',
                     badge: 'bg-blue-100 text-blue-800 border-blue-200',
                     text: 'text-blue-800'
                 };
@@ -92,7 +100,9 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
             >
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                        <span className="text-2xl">🌡️</span>
+                        <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
                         <h3 className="text-lg font-semibold text-gray-800">IoT Sensor Alerts</h3>
                     </div>
                 </div>
@@ -113,7 +123,9 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                    <span className="text-2xl">🌡️</span>
+                    <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
                     <h3 className="text-lg font-semibold text-gray-800">IoT Sensor Alerts</h3>
                     {alerts.length > 0 && (
                         <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">
@@ -134,13 +146,29 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
 
             {/* Alert List */}
             <AnimatePresence>
-                {alerts.length === 0 ? (
+                {error ? (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="text-center py-8"
                     >
-                        <div className="text-4xl mb-3">✅</div>
+                        <svg className="w-12 h-12 mx-auto mb-3 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p className="text-red-600 font-medium">{error}</p>
+                        <button
+                            onClick={fetchAlerts}
+                            className="mt-4 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                        >
+                            Try Again
+                        </button>
+                    </motion.div>
+                ) : alerts.length === 0 ? (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center py-8"
+                    >
                         <p className="text-gray-600 font-medium">No Spoilage Alerts</p>
                         <p className="text-sm text-gray-500">All batches are within safe temperature and humidity ranges.</p>
                     </motion.div>
@@ -166,7 +194,7 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
                                     <div className="flex items-start justify-between relative z-10">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-xl">{styles.icon}</span>
+                                                <div className={`w-5 h-5 rounded-full ${styles.iconColor === 'text-red-600' ? 'bg-red-600' : styles.iconColor === 'text-orange-600' ? 'bg-orange-600' : styles.iconColor === 'text-yellow-600' ? 'bg-yellow-600' : 'bg-blue-600'}`}></div>
                                                 <span className={`${styles.badge} px-2 py-0.5 rounded-full text-xs font-bold border`}>
                                                     {alert.severity}
                                                 </span>
@@ -176,16 +204,20 @@ export default function SpoilageAlerts({ theme, onRefresh }) {
                                             </div>
 
                                             <h4 className={`font-semibold ${styles.text} mb-1`}>
-                                                ⚠️ {alert.message}
+                                                {alert.message}
                                             </h4>
 
                                             <div className="flex items-center gap-4 text-sm text-gray-600">
                                                 <span className="flex items-center gap-1">
-                                                    <span>🌡️</span>
+                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                    </svg>
                                                     <span className="font-medium">{alert.temperature}°C</span>
                                                 </span>
                                                 <span className="flex items-center gap-1">
-                                                    <span>💧</span>
+                                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                                    </svg>
                                                     <span className="font-medium">{alert.humidity}%</span>
                                                 </span>
                                                 <span className="flex items-center gap-1 font-mono text-xs bg-gray-100 px-2 py-0.5 rounded">

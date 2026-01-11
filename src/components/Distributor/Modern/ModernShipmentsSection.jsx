@@ -69,11 +69,11 @@ const ModernShipmentsSection = () => {
   ];
 
   const recipientTypes = [
-    { value: 'MANUFACTURER', label: 'Manufacturer', icon: '🏭' },
-    { value: 'DISTRIBUTOR', label: 'Distributor', icon: '🚛' },
-    { value: 'RETAILER', label: 'Retailer', icon: '🏪' },
-    { value: 'CUSTOMER', label: 'Customer', icon: '👤' },
-    { value: 'LAB', label: 'Laboratory', icon: '🔬' }
+    { value: 'MANUFACTURER', label: 'Manufacturer', icon: '' },
+    { value: 'DISTRIBUTOR', label: 'Distributor', icon: '' },
+    { value: 'RETAILER', label: 'Retailer', icon: '' },
+    { value: 'CUSTOMER', label: 'Customer', icon: '' },
+    { value: 'LAB', label: 'Laboratory', icon: '' }
   ];
 
   // Fetch shipments with error handling
@@ -276,7 +276,7 @@ const ModernShipmentsSection = () => {
   };
 
   const getRecipientTypeIcon = (type) => {
-    return recipientTypes.find(rt => rt.value === type)?.icon || '📦';
+    return recipientTypes.find(rt => rt.value === type)?.icon || '';
   };
 
   const formatDate = (dateString) => {

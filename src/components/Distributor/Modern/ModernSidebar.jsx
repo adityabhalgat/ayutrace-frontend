@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import AyuTraceLogo from '../../AyuTraceLogo';
 
 // Modern Icon Components
 const HomeIcon = ({ className }) => (
@@ -90,22 +91,18 @@ export default function ModernSidebar({
           layout
           className="flex items-center space-x-3"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
-            </svg>
-          </div>
-          {!collapsed && (
+          {!collapsed ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              className="flex flex-col items-center"
             >
-              <h1 className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                AyuTrace
-              </h1>
-              <p className="text-xs text-gray-500">Distributor</p>
+              <AyuTraceLogo size="md" />
+              <p className="text-xs text-gray-500 mt-1">Distributor</p>
             </motion.div>
+          ) : (
+            <AyuTraceLogo size="sm" />
           )}
         </motion.div>
       </div>
@@ -160,20 +157,6 @@ export default function ModernSidebar({
 
       {/* Bottom Actions */}
       <div className="absolute bottom-6 left-0 right-0 px-3 space-y-2">
-        {/* Logout Button */}
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors group"
-        >
-          <LogoutIcon className="w-4 h-4" />
-          {!collapsed && (
-            <span className="ml-2 text-sm font-medium">Logout</span>
-          )}
-        </motion.button>
-
         {/* Toggle Button */}
         <motion.button
           type="button"
@@ -194,11 +177,6 @@ export default function ModernSidebar({
             <span className="ml-2 text-sm">Collapse</span>
           )}
         </motion.button>
-      </div>
-
-      {/* Status Indicator */}
-      <div className="absolute top-4 right-3">
-        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
       </div>
     </motion.div>
   );

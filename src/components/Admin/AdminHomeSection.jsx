@@ -68,56 +68,48 @@ const AdminHomeSection = () => {
         {
             title: 'Total Users',
             value: dashboardData?.overview.totalUsers || 0,
-            icon: '👥',
             color: 'blue',
             change: '+12%'
         },
         {
             title: 'Organizations',
             value: dashboardData?.overview.totalOrganizations || 0,
-            icon: '🏢',
             color: 'green',
             change: '+5%'
         },
         {
             title: 'Raw Material Batches',
             value: dashboardData?.overview.totalRawMaterialBatches || 0,
-            icon: '📦',
             color: 'yellow',
             change: '+25%'
         },
         {
             title: 'Finished Products',
             value: dashboardData?.overview.totalFinishedGoods || 0,
-            icon: '🎯',
             color: 'purple',
             change: '+18%'
         },
         {
             title: 'Lab Tests',
             value: dashboardData?.overview.totalLabTests || 0,
-            icon: '🧪',
             color: 'indigo',
             change: '+8%'
         },
         {
             title: 'Certificates',
             value: dashboardData?.overview.totalCertificates || 0,
-            icon: '📜',
             color: 'pink',
             change: '+15%'
         },
         {
             title: 'QR Codes',
             value: dashboardData?.overview.totalQRCodes || 0,
-            icon: '📱',
             color: 'teal',
             change: '+30%'
         },
         {
             title: 'Active Users',
             value: dashboardData?.overview.activeUsers || 0,
-            icon: '🟢',
             color: 'emerald',
             change: '+3%'
         }
@@ -151,7 +143,6 @@ const AdminHomeSection = () => {
                                     <span className="text-gray-500 text-sm ml-1">vs last month</span>
                                 </div>
                             </div>
-                            <div className="text-4xl">{stat.icon}</div>
                         </div>
                     </div>
                 ))}

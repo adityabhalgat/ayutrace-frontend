@@ -99,7 +99,11 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
     {
       title: 'Add Inventory',
       description: 'Add new items to stock',
-      icon: '📦',
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+      ),
       color: 'from-blue-500 to-cyan-500',
       action: () => {
         showNotification('Navigating to Inventory...', 'success');
@@ -111,7 +115,11 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
     {
       title: 'Create Shipment',
       description: 'Ship items to customers',
-      icon: '🚚',
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
       color: 'from-emerald-500 to-teal-500',
       action: () => {
         showNotification('Navigating to Shipments...', 'success');
@@ -123,7 +131,11 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
     {
       title: 'Scan QR Code',
       description: 'Verify product authenticity',
-      icon: '📱',
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+        </svg>
+      ),
       color: 'from-purple-500 to-pink-500',
       action: () => {
         showNotification('Navigating to Verification...', 'success');
@@ -135,7 +147,11 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
     {
       title: 'View Analytics',
       description: 'Check performance metrics',
-      icon: '📊',
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      ),
       color: 'from-orange-500 to-red-500',
       action: () => {
         showNotification('Navigating to Analytics...', 'success');
@@ -197,7 +213,7 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
         className="flex flex-col md:flex-row md:items-center md:justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back! 👋</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
           <p className="text-gray-600 mt-1">Here's what's happening with your distribution network</p>
         </div>
         <div className="mt-4 md:mt-0 flex items-center space-x-4">
@@ -228,11 +244,20 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${metric.gradient} flex items-center justify-center`}>
-                <span className="text-2xl">
-                  {metric.icon === 'CubeIcon' ? '📦' :
-                    metric.icon === 'TruckIcon' ? '🚚' :
-                      metric.icon === 'ShieldIcon' ? '🛡️' : '📊'}
-                </span>
+                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {metric.icon === 'CubeIcon' && (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  )}
+                  {metric.icon === 'TruckIcon' && (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  )}
+                  {metric.icon === 'ShieldIcon' && (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  )}
+                  {metric.icon === 'ChartIcon' && (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  )}
+                </svg>
               </div>
               <div className={`text-sm font-medium px-2 py-1 rounded-full ${metric.changeType === 'positive'
                   ? 'text-green-600 bg-green-50'
@@ -340,12 +365,16 @@ export default function ModernHomeSection({ theme, onSectionChange }) {
                     {new Date(shipment.createdAt).toLocaleDateString()} - {shipment.status}
                   </p>
                 </div>
-                <div className="text-2xl">🚚</div>
+                <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </motion.div>
             ))}
             {(!dashboardData?.recentShipments || dashboardData.recentShipments.length === 0) && (
               <div className="text-center py-4 text-gray-500">
-                <div className="text-4xl mb-2">📦</div>
+                <svg className="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
                 <p>No recent shipments</p>
               </div>
             )}

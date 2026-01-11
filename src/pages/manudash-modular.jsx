@@ -104,10 +104,10 @@ export default function ManufacturerDashboard() {
 
             {/* Profile Modal (Top Bar) */}
             <ProfileModal
-                showProfile={showProfile}
-                closeProfile={closeProfile}
-                profileLoading={profileLoading}
-                profileError={profileError}
+                show={showProfile}
+                onClose={closeProfile}
+                loading={profileLoading}
+                error={profileError}
                 profileData={profileData}
             />
 

@@ -111,7 +111,7 @@ export default function AdminDashboard() {
             {/* Profile Modal */}
             {showProfile && (
                 <ProfileModal
-                    isOpen={showProfile}
+                    show={showProfile}
                     onClose={closeProfile}
                     profileData={profileData}
                     loading={profileLoading}

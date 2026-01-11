@@ -231,7 +231,6 @@ const LabsBlockchain = () => {
                                 {transaction.certificationId && (
                                     <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
                                         <div className="flex items-center space-x-3">
-                                            <span className="text-green-600 text-xl">🏆</span>
                                             <div>
                                                 <p className="font-semibold text-green-800">Certificate Issued</p>
                                                 <p className="text-sm text-green-600">Certificate ID: {transaction.certificationId}</p>
@@ -293,7 +292,6 @@ const LabsBlockchain = () => {
                             <p className="text-indigo-200 text-sm">Total Transactions</p>
                             <p className="text-3xl font-bold">{blockchainData.length}</p>
                         </div>
-                        <span className="text-4xl opacity-80">⛓️</span>
                     </div>
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg">
@@ -304,7 +302,6 @@ const LabsBlockchain = () => {
                                 {blockchainData.filter(t => t.certificationId).length}
                             </p>
                         </div>
-                        <span className="text-4xl opacity-80">🏆</span>
                     </div>
                 </div>
                 <div className="bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg">
@@ -315,7 +312,6 @@ const LabsBlockchain = () => {
                                 {blockchainData.filter(t => t.result === 'passed').length}
                             </p>
                         </div>
-                        <span className="text-4xl opacity-80">✅</span>
                     </div>
                 </div>
                 <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-xl p-6 text-white shadow-lg">
@@ -326,7 +322,6 @@ const LabsBlockchain = () => {
                                 {blockchainData.reduce((sum, t) => sum + t.gasUsed, 0).toLocaleString()}
                             </p>
                         </div>
-                        <span className="text-4xl opacity-80">⛽</span>
                     </div>
                 </div>
             </div>

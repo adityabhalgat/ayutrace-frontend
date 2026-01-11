@@ -2,13 +2,13 @@ import React from 'react';
 
 const AdminSidebar = ({ activeTab, setActiveTab }) => {
     const menuItems = [
-        { key: 'Dashboard', label: '📊 Dashboard', description: 'System overview and statistics' },
-        { key: 'Users', label: '👥 User Management', description: 'Manage all system users' },
-        { key: 'Organizations', label: '🏢 Organizations', description: 'CRUD operations for organizations' },
-        { key: 'Supply Chain', label: '🔗 Supply Chain', description: 'Monitor supply chain events' },
-        { key: 'Alerts', label: '🚨 System Alerts', description: 'View and resolve system alerts' },
-        { key: 'Admin Actions', label: '📋 Admin Actions', description: 'View admin activity logs' },
-        { key: 'Analytics', label: '📈 Analytics', description: 'Reports and insights' }
+        { key: 'Dashboard', label: 'Dashboard', description: 'System overview and statistics' },
+        { key: 'Users', label: 'User Management', description: 'Manage all system users' },
+        { key: 'Organizations', label: 'Organizations', description: 'CRUD operations for organizations' },
+        { key: 'Supply Chain', label: 'Supply Chain', description: 'Monitor supply chain events' },
+        { key: 'Alerts', label: 'System Alerts', description: 'View and resolve system alerts' },
+        { key: 'Admin Actions', label: 'Admin Actions', description: 'View admin activity logs' },
+        { key: 'Analytics', label: 'Analytics', description: 'Reports and insights' }
     ];
 
     return (

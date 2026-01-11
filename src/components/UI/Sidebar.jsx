@@ -10,36 +10,36 @@ const Sidebar = ({ activeTab, setActiveTab, sidebarItems, type = 'distributor', 
         switch (type) {
             case 'admin':
                 return [
-                    { key: 'Home', icon: '🏠', label: 'Home', description: 'Dashboard overview' },
-                    { key: 'Users', icon: '👥', label: 'User Management', description: 'Manage system users' },
-                    { key: 'Organizations', icon: '�', label: 'Organizations', description: 'Manage organizations' },
-                    { key: 'Supply Chain', icon: '🔗', label: 'Supply Chain', description: 'Monitor supply chain' },
-                    { key: 'System Alerts', icon: '🚨', label: 'System Alerts', description: 'View system alerts' },
-                    { key: 'Analytics', icon: '📊', label: 'Analytics', description: 'View analytics and reports' }
+                    { key: 'Home', label: 'Home', description: 'Dashboard overview' },
+                    { key: 'Users', label: 'User Management', description: 'Manage system users' },
+                    { key: 'Organizations', label: 'Organizations', description: 'Manage organizations' },
+                    { key: 'Supply Chain', label: 'Supply Chain', description: 'Monitor supply chain' },
+                    { key: 'System Alerts', label: 'System Alerts', description: 'View system alerts' },
+                    { key: 'Analytics', label: 'Analytics', description: 'View analytics and reports' }
                 ];
             case 'labs':
                 return [
-                    { key: 'home', icon: '�🏠', label: 'Home', description: 'Dashboard overview' },
-                    { key: 'your-tests', icon: '🧪', label: 'Your Tests', description: 'Manage lab tests' },
-                    { key: 'verify', icon: '✅', label: 'Verify', description: 'Verify products' },
-                    { key: 'add-tests', icon: '➕', label: 'Add Tests', description: 'Add new tests' },
-                    { key: 'blockchain', icon: '⛓️', label: 'Blockchain', description: 'Blockchain records' }
+                    { key: 'home', label: 'Home', description: 'Dashboard overview' },
+                    { key: 'your-tests', label: 'Your Tests', description: 'Manage lab tests' },
+                    { key: 'verify', label: 'Verify', description: 'Verify products' },
+                    { key: 'add-tests', label: 'Add Tests', description: 'Add new tests' },
+                    { key: 'blockchain', label: 'Blockchain', description: 'Blockchain records' }
                 ];
             case 'manufacturer':
                 return [
-                    { key: 'Home', icon: '🏠', label: 'Home', description: 'Dashboard overview' },
-                    { key: 'Your Goods', icon: '📦', label: 'Your Goods', description: 'Manage products' },
-                    { key: 'Verify', icon: '✅', label: 'Verify', description: 'Product verification' },
-                    { key: 'Add Goods', icon: '➕', label: 'Add Goods', description: 'Add new products' },
-                    { key: 'Check Blockchain', icon: '⛓️', label: 'Blockchain', description: 'Blockchain verification' }
+                    { key: 'Home', label: 'Home', description: 'Dashboard overview' },
+                    { key: 'Your Goods', label: 'Your Goods', description: 'Manage products' },
+                    { key: 'Verify', label: 'Verify', description: 'Product verification' },
+                    { key: 'Add Goods', label: 'Add Goods', description: 'Add new products' },
+                    { key: 'Check Blockchain', label: 'Blockchain', description: 'Blockchain verification' }
                 ];
             default: // distributor
                 return [
-                    { key: 'Home', icon: '🏠', label: 'Home', description: 'Dashboard overview' },
-                    { key: 'Your Goods', icon: '📦', label: 'Your Goods', description: 'Inventory management' },
-                    { key: 'Verify', icon: '✅', label: 'Verify', description: 'Product verification' },
-                    { key: 'Add Goods', icon: '➕', label: 'Add Goods', description: 'Add inventory' },
-                    { key: 'Check Blockchain', icon: '⛓️', label: 'Blockchain', description: 'Blockchain records' }
+                    { key: 'Home', label: 'Home', description: 'Dashboard overview' },
+                    { key: 'Your Goods', label: 'Your Goods', description: 'Inventory management' },
+                    { key: 'Verify', label: 'Verify', description: 'Product verification' },
+                    { key: 'Add Goods', label: 'Add Goods', description: 'Add inventory' },
+                    { key: 'Check Blockchain', label: 'Blockchain', description: 'Blockchain records' }
                 ];
         }
     };
