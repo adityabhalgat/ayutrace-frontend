@@ -22,7 +22,6 @@ const useOnScreen = (options) => {
 
         return () => {
             if (ref.current) {
-                // Use a variable to avoid issues with the ref being null during cleanup
                 const currentRef = ref.current;
                 observer.unobserve(currentRef);
             }
@@ -32,11 +31,35 @@ const useOnScreen = (options) => {
     return [ref, isVisible];
 };
 
+// --- Vegetable/Farm Images Component ---
+const HeroImage = ({ className }) => (
+    <div className={className}>
+        <img 
+            src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=600&fit=crop" 
+            alt="Fresh Farm Produce" 
+            className="rounded-2xl shadow-2xl object-cover w-full h-full"
+        />
+    </div>
+);
+
+const VegetableBasket = () => (
+    <img 
+        src="https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=400&h=400&fit=crop" 
+        alt="Fresh Vegetables" 
+        className="rounded-xl shadow-lg object-cover"
+    />
+);
+
+
 // --- SVG Icons ---
+const CheckIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+);
 const LeafIcon = ({ className }) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M17.61,3.47A8.75,8.75,0,0,0,12,2a8.75,8.75,0,0,0-5.61,1.47,8.75,8.75,0,0,0-3.32,12.46l.16.27.17.27,1.6,2.57.17.26.16.25a8.74,8.74,0,0,0,13.34,0l.16-.25.17-.26,1.6-2.57.17-.27.16-.27A8.75,8.75,0,0,0,17.61,3.47ZM12,20.42a6.76,6.76,0,0,1-5.18-2.3l-.15-.24-.15-.24L5,15.07l-.15-.24-.14-.24a6.75,6.75,0,0,1,2.56-9.58,6.75,6.75,0,0,1,9.56,0,6.75,6.75,0,0,1,2.56,9.58l-.14.24-.15.24L19,15.07l-.15.24-.15.24A6.76,6.76,0,0,1,12,20.42Z" />
-        <path d="M12,4.11a6.83,6.83,0,0,0-4,1.62,6.7,6.7,0,0,0,4,11.62,6.7,6.7,0,0,0,4-11.62A6.83,6.83,0,0,0,12,4.11Z" />
+        <path d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22L6.66,19.7C7.14,19.87,7.64,20,8,20C19,20,22,3,22,3C21,5,14,5.25,9,6.25C4,7.25,2,11.5,2,13.5C2,15.5,3.75,17.25,3.75,17.25C7,8,17,8,17,8Z" />
     </svg>
 );
 const BlockchainIcon = ({ className }) => (
@@ -59,45 +82,41 @@ const QrCodeIcon = ({ className }) => (
         <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><line x1="14" y1="14" x2="14.01" y2="14"></line><line x1="17.5" y1="14" x2="17.51" y2="14"></line><line x1="14" y1="17.5" x2="14.01" y2="17.5"></line><line x1="17.5" y1="17.5" x2="17.51" y2="17.5"></line><line x1="21" y1="17.5" x2="21.01" y2="17.5"></line><line x1="17.5" y1="21" x2="17.51" y2="21"></line><line x1="21" y1="21" x2="21.01" y2="21"></line><line x1="14" y1="21" x2="14.01" y2="21"></line>
     </svg>
 );
+const ShieldCheckIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        <polyline points="9 12 11 14 15 10"></polyline>
+    </svg>
+);
+const TrendingDownIcon = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+        <polyline points="17 18 23 18 23 12"></polyline>
+    </svg>
+);
 
-// --- Video Animation Component ---
-const VideoAnimation = () => {
-    const videoPath = "/PlantScanning.mp4"; // Path from public folder
-    return (
-        <div className="relative w-full max-w-xs sm:max-w-sm h-48 sm:h-64 md:h-80 flex items-center justify-center bg-black/10 rounded-xl sm:rounded-2xl shadow-lg overflow-hidden">
-            <video
-                className="w-full h-full object-cover"
-                src={videoPath}
-                autoPlay
-                loop
-                muted
-                playsInline
-            >
-                Your browser does not support the video tag.
-            </video>
-        </div>
-    );
-};
+
 
 // --- Landing Page Component ---
 const LandingPage = () => {
     const navigate = useNavigate();
     const [isLoaded, setIsLoaded] = useState(false);
-    const [activeFeature, setActiveFeature] = useState(0);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
         setIsLoaded(true);
+        
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const [featuresRef, featuresVisible] = useOnScreen({ threshold: 0.2 });
     const [ctaRef, ctaVisible] = useOnScreen({ threshold: 0.3 });
-
-    const features = [
-        { icon: <BlockchainIcon />, title: "Immutable Blockchain Ledger", description: "Every step, from farm to fork, is permanently recorded on a tamper-proof ledger, ensuring ultimate data integrity and freshness verification." },
-        { icon: <GeoTagIcon />, title: "Geo-Tagged Provenance", description: "GPS-enabled data capture pinpoints the exact origin of every product, verifying its source and tracking cold chain compliance." },
-        { icon: <SmartContractIcon />, title: "Smart Contract Automation", description: "Automated validation of temperature, humidity, and handling ensures food safety compliance at every stage of the supply chain." },
-        { icon: <QrCodeIcon />, title: "Consumer Transparency Portal", description: "A simple QR scan on the final product reveals the entire journey, empowering consumers with verifiable proof of freshness." },
-    ];
+    const [benefitsRef, benefitsVisible] = useOnScreen({ threshold: 0.2 });
 
     const handleSignupClick = () => {
         navigate('/signup');
@@ -108,168 +127,432 @@ const LandingPage = () => {
     };
 
     return (
-        <div className="bg-stone-50 text-gray-800 font-sans">
-            {/* Header */}
-            <header className={`fixed top-0 left-0 w-full z-20 p-2 sm:p-4 md:p-6 transition-all duration-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'}`}>
-                <div className="responsive-container flex justify-between items-center bg-white/50 backdrop-blur-sm p-2 sm:p-3 rounded-full shadow-sm border border-stone-200/80">
-                    <AyuTraceLogo size="small" showText={false} onClick={() => navigate('landing')} />
-                    <div className="flex items-center gap-1 sm:gap-2">
-                        <button onClick={handleLoginClick} className="text-gray-600 font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full hover:bg-emerald-100 transition-colors text-sm sm:text-base">
-                            Login
-                        </button>
-                        <button onClick={handleSignupClick} className="bg-emerald-600 text-white font-semibold px-2 sm:px-4 py-1 sm:py-2 rounded-full shadow-lg hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base">
-                            Sign Up
-                        </button>
+        <div className="bg-gradient-to-b from-amber-50 via-white to-stone-50 text-gray-800 font-sans">
+            {/* Header - Clean Single Bar */}
+            <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'}`}>
+                <div className={`transition-all duration-500 ${isScrolled ? 'px-0 py-0' : 'max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-3'}`}>
+                    <div className={`flex justify-between items-center backdrop-blur-xl px-8 shadow-lg border transition-all duration-500 ${
+                        isScrolled 
+                            ? 'bg-white/60 py-3 rounded-none border-white/20' 
+                            : 'bg-white/70 py-3.5 rounded-full border-white/40'
+                    }`}>
+                        {/* Logo */}
+                        <AyuTraceLogo size="small" showText={false} onClick={() => navigate('/landing')} className="cursor-pointer" />
+                        
+                        {/* Navigation - Centered with proper spacing */}
+                        <nav className="hidden lg:flex items-center gap-12">
+                            <a href="#features" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px]">Features</a>
+                            <a href="#benefits" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px]">Benefits</a>
+                            <a href="#" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px]">Product</a>
+                            <a href="#footer" onClick={(e) => { e.preventDefault(); document.getElementById('footer').scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px] cursor-pointer">Contact</a>
+                        </nav>
+                        
+                        {/* Auth Buttons */}
+                        <div className="flex items-center gap-3">
+                            <button 
+                                onClick={handleLoginClick} 
+                                className="text-gray-700 font-semibold px-5 py-2 rounded-full hover:bg-emerald-50 transition-all duration-300 text-[18px]"
+                            >
+                                Sign In
+                            </button>
+                            <button 
+                                onClick={handleSignupClick} 
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 text-[18px]"
+                            >
+                                Start for Free
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            {/* Hero Section */}
-            <main className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 sm:pt-24 md:pt-20">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-100 via-emerald-50 to-stone-100"></div>
-                <div className="absolute top-0 -left-1/3 w-2/3 h-2/3 bg-emerald-200/50 rounded-full filter blur-3xl opacity-50 animate-pulse"></div>
-                <div className="absolute bottom-0 -right-1/3 w-2/3 h-2/3 bg-green-200/50 rounded-full filter blur-3xl opacity-40 animate-pulse delay-1000"></div>
-                <div className="relative responsive-container z-10 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                    <div className="text-center lg:text-left">
-                        <h1 className={`responsive-text-3xl lg:text-6xl xl:text-7xl font-extrabold text-gray-800 mb-4 leading-tight transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                            Freshness You Can Trust.
-                        </h1>
-                        <p className={`responsive-text-base md:text-xl max-w-xl mx-auto lg:mx-0 text-gray-600 mb-6 sm:mb-8 transition-all duration-700 delay-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                            Leveraging blockchain to bring unparalleled transparency to perishable food supply chains. Reduce spoilage, prevent losses, from farm to fork.
-                        </p>
-                        <div className={`flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-3 sm:gap-4 transition-all duration-700 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                            <button
-                                onClick={() => navigate('/verify')}
-                                className="w-full sm:w-auto bg-emerald-600 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-xl hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
-                            >
-                                Scan a Product
-                            </button>
-                            <button
-                                onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
-                                className="w-full sm:w-auto bg-white text-emerald-600 font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-xl hover:bg-stone-100 transition-all duration-300 transform hover:scale-105 border border-emerald-200 text-sm sm:text-base"
-                            >
-                                Explore the Tech
-                            </button>
+            {/* Hero Section - Unique Design with Video */}
+            <main className="relative min-h-screen flex items-center overflow-hidden pt-12">
+                {/* Background with Image/Video */}
+                <div className="absolute inset-0 z-0">
+                    {/* Background Image */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-700 via-gray-600 to-gray-700"></div>
+                    <div 
+                        className="absolute inset-0 bg-cover bg-center opacity-30"
+                        style={{
+                            backgroundImage: `url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1920&h=1080&fit=crop&q=80')`
+                        }}
+                    ></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-stone-900/70 via-stone-800/50 to-transparent"></div>
+                </div>
+                
+                {/* Content - Asymmetric Layout */}
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 py-20">
+                    <div className="grid lg:grid-cols-12 gap-8 items-center">
+                        {/* Left Content - Takes more space */}
+                        <div className="lg:col-span-7 text-left">
+                            {/* Animated badge */}
+                            <div className={`inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-md border border-emerald-400/30 rounded-full px-4 py-2 mb-6 transition-all duration-700 delay-100 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                                <span className="text-emerald-100 text-sm font-medium">Blockchain-Powered Transparency</span>
+                            </div>
+
+                            <h1 className={`text-5xl lg:text-8xl font-black text-white mb-6 leading-[1.1] transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                Freshness You<br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Can Trust.</span>
+                            </h1>
+                            
+                            <p className={`text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed max-w-2xl transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                Leveraging blockchain to bring unparalleled transparency to perishable food supply chains. Reduce spoilage, prevent losses, from farm to fork.
+                            </p>
+                            
+                            <div className={`flex flex-col sm:flex-row gap-4 mb-12 transition-all duration-700 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                <button
+                                    onClick={() => navigate('/verify')}
+                                    className="group bg-emerald-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:bg-emerald-600 transition-all duration-300 transform hover:scale-105 text-lg flex items-center justify-center gap-2"
+                                >
+                                    <span>Scan a Product</span>
+                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            {/* Stats Row */}
+                            <div className={`grid grid-cols-3 gap-6 transition-all duration-700 delay-800 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                                    <p className="text-3xl font-bold text-white mb-1">10K+</p>
+                                    <p className="text-sm text-gray-300">Products Tracked</p>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                                    <p className="text-3xl font-bold text-white mb-1">50+</p>
+                                    <p className="text-sm text-gray-300">Partners</p>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                                    <p className="text-3xl font-bold text-white mb-1">99.9%</p>
+                                    <p className="text-sm text-gray-300">Accurate</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Side - Floating Cards */}
+                        <div className="lg:col-span-5 relative h-[600px] hidden lg:block">
+                            {/* Animated floating card 1 */}
+                            <div className={`absolute top-0 right-0 bg-white rounded-3xl shadow-2xl p-6 w-64 transition-all duration-1000 delay-700 hover:scale-105 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'} animate-float`}>
+                                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
+                                    <ShieldCheckIcon className="w-6 h-6 text-emerald-600" />
+                                </div>
+                                <h3 className="font-bold text-gray-900 mb-2">100% Verified</h3>
+                                <p className="text-sm text-gray-600">Blockchain Tracked Supply Chain</p>
+                            </div>
+
+                            {/* Animated floating card 2 */}
+                            <div className={`absolute top-40 -right-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl shadow-2xl p-6 w-72 transition-all duration-1000 delay-900 hover:scale-105 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'} animate-float-delayed`}>
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                                        <GeoTagIcon className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white font-bold">Real-time Tracking</p>
+                                        <p className="text-emerald-100 text-xs">GPS-enabled</p>
+                                    </div>
+                                </div>
+                                <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+                                    <div className="h-full bg-white rounded-full w-3/4 animate-pulse"></div>
+                                </div>
+                            </div>
+
+                            {/* Animated floating card 3 */}
+                            <div className={`absolute bottom-20 right-4 bg-white rounded-3xl shadow-2xl p-5 w-60 transition-all duration-1000 delay-1100 hover:scale-105 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'} animate-float`}>
+                                <img 
+                                    src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&h=300&fit=crop" 
+                                    alt="Fresh Organic Produce" 
+                                    className="rounded-2xl mb-3 w-full h-32 object-cover"
+                                />
+                                <p className="text-sm font-semibold text-gray-900">Organic Farm Harvest</p>
+                            </div>
                         </div>
                     </div>
-                    <div className={`flex justify-center items-center mt-8 lg:mt-0 transition-opacity duration-1000 delay-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-                        <VideoAnimation />
+                </div>
+
+                {/* Scroll indicator */}
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
+                    <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
+                        <div className="w-1 h-2 bg-white/50 rounded-full"></div>
                     </div>
                 </div>
             </main>
 
-            {/* Features Section */}
-            <section id="features" ref={featuresRef} className="section-responsive bg-white">
-                <div className="responsive-container">
-                    <div className={`text-center mb-12 sm:mb-16 transition-all duration-700 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                        <h2 className="responsive-text-2xl md:text-4xl font-bold mb-3">The Future of Fresh Food Integrity</h2>
-                        <p className="responsive-text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-                            Our platform provides a single source of truth, creating a transparent ecosystem for farmers, food processors, and consumers.
+            {/* Features Section - Animated Icon Grid */}
+            <section id="features" ref={featuresRef} className="py-20 bg-gradient-to-b from-white to-emerald-50/30">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className={`text-center mb-16 transition-all duration-700 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">The Future of Fresh<br />Food Integrity</h2>
+                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Hover over each feature to discover how we're revolutionizing food transparency
                         </p>
                     </div>
-                    <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-start mt-12 sm:mt-16 transition-all duration-700 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
-                        <div className="flex flex-col gap-4">
-                            {features.map((feature, index) => (
-                                <div
-                                    key={feature.title}
-                                    onMouseEnter={() => setActiveFeature(index)}
-                                    className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-300 border-2 ${activeFeature === index ? 'bg-emerald-50 border-emerald-300 shadow-lg scale-105' : 'bg-white border-transparent hover:border-gray-200 hover:shadow-md'}`}
-                                >
-                                    <h3 className="responsive-text-lg font-bold text-gray-800">{feature.title}</h3>
-                                    <p className={`text-gray-600 transition-all duration-300 responsive-text-sm ${activeFeature === index ? 'mt-2 opacity-100' : 'h-0 opacity-0 lg:opacity-100 lg:h-auto lg:mt-2'}`}>{feature.description}</p>
+
+                    {/* Animated Icon Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {/* Feature 1 - Blockchain */}
+                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            {/* Icon State - Default */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
+                                <div className="w-28 h-28 bg-teal-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
+                                    <BlockchainIcon className="w-14 h-14 text-teal-600" />
                                 </div>
-                            ))}
-                        </div>
-                        <div className="relative h-64 sm:h-80 lg:h-full lg:min-h-[350px] lg:sticky lg:top-24">
-                            <div className="bg-stone-100 rounded-xl sm:rounded-2xl w-full h-full flex items-center justify-center p-6 sm:p-8">
-                                {features.map((feature, index) => (
-                                    <div
-                                        key={`${feature.title}-details`}
-                                        className={`absolute inset-0 transition-opacity duration-500 flex flex-col items-center justify-center text-center p-6 sm:p-8 ${activeFeature === index ? 'opacity-100' : 'opacity-0'}`}
-                                    >
-                                        <div className="mb-4 sm:mb-6 bg-emerald-100 p-4 sm:p-5 rounded-full">
-                                            {React.cloneElement(feature.icon, { className: "h-8 w-8 sm:h-12 sm:w-12 text-emerald-500" })}
-                                        </div>
-                                        <h3 className="responsive-text-lg sm:text-2xl font-bold mb-2 sm:mb-3 text-gray-800">{feature.title}</h3>
-                                        <p className="text-gray-600 max-w-sm responsive-text-sm">{feature.description}</p>
-                                    </div>
-                                ))}
+                                <h3 className="text-xl font-bold text-gray-900 text-center px-4">Immutable Blockchain</h3>
                             </div>
+                            
+                            {/* Expanded State - On Hover */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-teal-600 to-teal-700 p-8 flex flex-col justify-between opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 rounded-3xl">
+                                <div>
+                                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                                        <BlockchainIcon className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-3">Blockchain Ledger</h3>
+                                    <p className="text-white/90 text-base leading-relaxed">
+                                        Every transaction recorded on an immutable blockchain, guaranteeing transparency and preventing fraud.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Secure</span>
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Transparent</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Feature 2 - Geo-Tagged */}
+                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 delay-100 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            {/* Icon State - Default */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
+                                <div className="w-28 h-28 bg-amber-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
+                                    <GeoTagIcon className="w-14 h-14 text-amber-600" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 text-center px-4">Geo-Tagged Tracking</h3>
+                            </div>
+                            
+                            {/* Expanded State - On Hover */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-600 to-amber-700 p-8 flex flex-col justify-between opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 rounded-3xl">
+                                <div>
+                                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                                        <GeoTagIcon className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-3">GPS Provenance</h3>
+                                    <p className="text-white/90 text-base leading-relaxed">
+                                        GPS-enabled tracking pinpoints exact origins, verifying authenticity and cold chain compliance.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Real-time</span>
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Verified</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Feature 3 - Smart Contract */}
+                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 delay-200 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            {/* Icon State - Default */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
+                                <div className="w-28 h-28 bg-blue-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
+                                    <SmartContractIcon className="w-14 h-14 text-blue-600" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 text-center px-4">Smart Automation</h3>
+                            </div>
+                            
+                            {/* Expanded State - On Hover */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-blue-700 p-8 flex flex-col justify-between opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 rounded-3xl">
+                                <div>
+                                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                                        <SmartContractIcon className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-3">Fresh Results</h3>
+                                    <p className="text-white/90 text-base leading-relaxed">
+                                        Automated validation of temperature, humidity, and handling ensures food safety compliance.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Automated</span>
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Safe</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Feature 4 - Post-Harvest */}
+                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 delay-300 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            {/* Icon State - Default */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
+                                <div className="w-28 h-28 bg-purple-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
+                                    <TrendingDownIcon className="w-14 h-14 text-purple-600" />
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900 text-center px-4">Reduce Losses</h3>
+                            </div>
+                            
+                            {/* Expanded State - On Hover */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-700 p-8 flex flex-col justify-between opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 rounded-3xl">
+                                <div>
+                                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
+                                        <TrendingDownIcon className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-3">Minimize Waste</h3>
+                                    <p className="text-white/90 text-base leading-relaxed">
+                                        Monitor spoilage risk in real-time and support farmers with transparent tracking.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Efficient</span>
+                                    <span className="text-xs bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white">Smart</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom CTA */}
+                    <div className={`text-center mt-16 transition-all duration-700 delay-500 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                        <p className="text-gray-600 mb-6">Ready to transform your supply chain?</p>
+                        <button
+                            onClick={() => document.getElementById('benefits').scrollIntoView({ behavior: 'smooth' })}
+                            className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        >
+                            Explore Benefits
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            {/* Benefits Section - New */}
+            <section id="benefits" ref={benefitsRef} className="py-20 bg-gradient-to-b from-emerald-50 to-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className={`text-center mb-16 transition-all duration-700 ${benefitsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Transform Your Perishable<br />Supply Chain Today</h2>
+                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                            Join leading food processors and distributors in the freshness revolution
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        {/* Benefit 1 */}
+                        <div className={`bg-white rounded-2xl p-8 shadow-lg border border-emerald-100 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 ${benefitsVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <ShieldCheckIcon className="w-8 h-8 text-emerald-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">Instant Verification</h3>
+                            <p className="text-gray-600 text-center leading-relaxed">
+                                Scan any QR code to instantly verify product authenticity and view its complete cold chain journey.
+                            </p>
+                        </div>
+
+                        {/* Benefit 2 */}
+                        <div className={`bg-white rounded-2xl p-8 shadow-lg border border-emerald-100 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 delay-100 ${benefitsVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <BlockchainIcon className="w-8 h-8 text-emerald-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">Blockchain Security</h3>
+                            <p className="text-gray-600 text-center leading-relaxed">
+                                Immutable records ensure data integrity and prevent tampering throughout the entire supply chain.
+                            </p>
+                        </div>
+
+                        {/* Benefit 3 */}
+                        <div className={`bg-white rounded-2xl p-8 shadow-lg border border-emerald-100 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 delay-200 ${benefitsVisible ? 'opacity-100' : 'opacity-0'}`}>
+                            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <LeafIcon className="w-8 h-8 text-emerald-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">Ensure Post-Harvest Quality</h3>
+                            <p className="text-gray-600 text-center leading-relaxed">
+                                Monitor temperature and conditions in real-time to minimize spoilage and support sustainable farming.
+                            </p>
                         </div>
                     </div>
                 </div>
             </section>
 
+
             {/* Enhanced CTA Section */}
-            <section id="get-started" ref={ctaRef} className="bg-gradient-to-br from-emerald-50 via-green-50 to-stone-100 section-responsive">
-                <div className={`responsive-container text-center transition-all duration-1000 ${ctaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                    <div className="max-w-4xl mx-auto">
-                        <h2 className="responsive-text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">Transform Your Perishable Supply Chain Today</h2>
-                        <p className="responsive-text-base md:text-xl text-gray-600 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
-                            Join the revolution in food freshness verification. Experience complete cold chain transparency from farm to fork with our cutting-edge blockchain technology.
-                        </p>
+            <section id="get-started" ref={ctaRef} className="py-24 bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 relative overflow-hidden">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1920&h=1080&fit=crop')] bg-cover bg-center"></div>
+                </div>
+                
+                <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center transition-all duration-1000 ${ctaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Start Your Journey<br />Towards a Healthier Future</h2>
+                    <p className="text-xl md:text-2xl text-emerald-50 mb-12 max-w-3xl mx-auto leading-relaxed">
+                        Join thousands of farmers, distributors, and consumers building a transparent food ecosystem.
+                    </p>
 
-                        {/* Enhanced Action Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12">
-                            <button
-                                onClick={handleSignupClick}
-                                className="w-full sm:w-auto bg-emerald-600 text-white font-bold px-8 py-4 rounded-full shadow-xl hover:bg-emerald-700 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-lg"
-                            >
-                                Start Your Journey
-                            </button>
-                            <button
-                                onClick={() => navigate('/verify')}
-                                className="w-full sm:w-auto bg-white text-emerald-600 font-bold px-8 py-4 rounded-full border-2 border-emerald-600 shadow-lg hover:bg-emerald-50 transition-all duration-300 transform hover:scale-105 text-lg"
-                            >
-                                Verify a Product
-                            </button>
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                        <button
+                            onClick={handleSignupClick}
+                            className="bg-white text-emerald-600 font-bold px-10 py-5 rounded-full shadow-2xl hover:bg-amber-50 transition-all duration-300 transform hover:scale-110 text-lg"
+                        >
+                            Verify a Product
+                        </button>
+                        <button
+                            onClick={() => navigate('/verify')}
+                            className="bg-transparent border-2 border-white text-white font-bold px-10 py-5 rounded-full hover:bg-white hover:text-emerald-600 transition-all duration-300 transform hover:scale-110 text-lg"
+                        >
+                            Learn More
+                        </button>
+                    </div>
+
+                    {/* Stats or Trust Indicators */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                            <p className="text-4xl font-bold text-white mb-2">10,000+</p>
+                            <p className="text-emerald-50">Products Tracked</p>
                         </div>
-
-                        {/* Feature Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-12">
-                            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-emerald-100 transform hover:scale-105 transition-all duration-300">
-                                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <QrCodeIcon className="h-8 w-8 text-emerald-600" />
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Instant Verification</h3>
-                                <p className="text-gray-600 text-sm">Scan any QR code to instantly access the complete product journey and authenticity proof.</p>
-                            </div>
-
-                            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-emerald-100 transform hover:scale-105 transition-all duration-300">
-                                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <BlockchainIcon className="h-8 w-8 text-emerald-600" />
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Blockchain Security</h3>
-                                <p className="text-gray-600 text-sm">Immutable records ensure data integrity and prevent tampering throughout the supply chain.</p>
-                            </div>
-
-                            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-emerald-100 transform hover:scale-105 transition-all duration-300">
-                                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <LeafIcon className="h-8 w-8 text-emerald-600" />
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Reduce Post-Harvest Losses</h3>
-                                <p className="text-gray-600 text-sm">Monitor spoilage risk in real-time and support local farmers with transparent cold chain tracking.</p>
-                            </div>
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                            <p className="text-4xl font-bold text-white mb-2">50+</p>
+                            <p className="text-emerald-50">Partner Organizations</p>
                         </div>
-
-                        {/* Trust Indicators */}
-                        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-emerald-200">
-                            <p className="text-gray-600 text-sm lg:text-base mb-4">Trusted by leading food processors and distributors</p>
-                            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-                                <div className="text-gray-400 font-semibold">Food Processor Partner</div>
-                                <div className="text-gray-400 font-semibold">Quality Inspected</div>
-                                <div className="text-gray-400 font-semibold">Cold Chain Verified</div>
-                                <div className="text-gray-400 font-semibold">Consumer Trusted</div>
-                            </div>
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+                            <p className="text-4xl font-bold text-white mb-2">99.9%</p>
+                            <p className="text-emerald-50">Data Accuracy</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-800 text-white py-8">
-                <div className="container mx-auto text-center">
-                    <p>&copy; 2025 FreshTrace. Building a transparent future for fresh food.</p>
+            <footer id="footer" className="bg-gray-900 text-white py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                        {/* Company Info */}
+                        <div className="col-span-1">
+                            <AyuTraceLogo size="medium" showText={false} />
+                            <p className="text-gray-400 mt-4">Building a transparent future for fresh food supply chains.</p>
+                        </div>
+
+                        {/* Quick Links */}
+                        <div>
+                            <h4 className="font-bold text-lg mb-4">Product</h4>
+                            <ul className="space-y-2 text-gray-400">
+                                <li><a href="#features" className="hover:text-emerald-400 transition-colors">Features</a></li>
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Pricing</a></li>
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Case Studies</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="font-bold text-lg mb-4">Company</h4>
+                            <ul className="space-y-2 text-gray-400">
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">About</a></li>
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Blog</a></li>
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Careers</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="font-bold text-lg mb-4">Support</h4>
+                            <ul className="space-y-2 text-gray-400">
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Contact</a></li>
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Documentation</a></li>
+                                <li><a href="#" className="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+                        <p>&copy; 2025 All rights reserved. Building a transparent future for fresh food.</p>
+                    </div>
                 </div>
             </footer>
         </div>

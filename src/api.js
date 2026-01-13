@@ -63,6 +63,9 @@ export function getProfile() {
   return apiRequest('/api/auth/me', { method: 'GET' });
 }
 
+// Alias for compatibility
+export const getUserProfile = getProfile;
+
 // Example for other modules
 export function fetchCollections() {
   return apiRequest('/api/collection', { method: 'GET' });
