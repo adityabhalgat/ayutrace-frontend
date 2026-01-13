@@ -102,6 +102,7 @@ const LandingPage = () => {
     const navigate = useNavigate();
     const [isLoaded, setIsLoaded] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         setIsLoaded(true);
@@ -130,44 +131,84 @@ const LandingPage = () => {
         <div className="bg-gradient-to-b from-amber-50 via-white to-stone-50 text-gray-800 font-sans">
             {/* Header - Clean Single Bar */}
             <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5'}`}>
-                <div className={`transition-all duration-500 ${isScrolled ? 'px-0 py-0' : 'max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-3'}`}>
-                    <div className={`flex justify-between items-center backdrop-blur-xl px-8 shadow-lg border transition-all duration-500 ${
+                <div className={`transition-all duration-500 ${isScrolled ? 'px-0 py-0' : 'max-w-7xl mx-auto px-3 sm:px-6 lg:px-12 py-1.5'}`}>
+                    <div className={`flex justify-between items-center backdrop-blur-xl px-3 sm:px-5 shadow-md border transition-all duration-500 ${
                         isScrolled 
-                            ? 'bg-white/60 py-3 rounded-none border-white/20' 
-                            : 'bg-white/70 py-3.5 rounded-full border-white/40'
+                            ? 'bg-white/60 py-2 rounded-none border-white/20' 
+                            : 'bg-white/70 py-2 rounded-full border-white/40'
                     }`}>
                         {/* Logo */}
                         <AyuTraceLogo size="small" showText={false} onClick={() => navigate('/landing')} className="cursor-pointer" />
                         
-                        {/* Navigation - Centered with proper spacing */}
-                        <nav className="hidden lg:flex items-center gap-12">
-                            <a href="#features" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px]">Features</a>
-                            <a href="#benefits" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px]">Benefits</a>
-                            <a href="#" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px]">Product</a>
-                            <a href="#footer" onClick={(e) => { e.preventDefault(); document.getElementById('footer').scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[18px] cursor-pointer">Contact</a>
+                        {/* Desktop Navigation */}
+                        <nav className="hidden lg:flex items-center gap-8">
+                            <a href="#features" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[15px]">Features</a>
+                            <a href="#benefits" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[15px]">Benefits</a>
+                            <a href="#" className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[15px]">Product</a>
+                            <a href="#footer" onClick={(e) => { e.preventDefault(); document.getElementById('footer').scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-[15px] cursor-pointer">Contact</a>
                         </nav>
                         
-                        {/* Auth Buttons */}
-                        <div className="flex items-center gap-3">
+                        {/* Desktop Auth Buttons */}
+                        <div className="hidden lg:flex items-center gap-2">
                             <button 
                                 onClick={handleLoginClick} 
-                                className="text-gray-700 font-semibold px-5 py-2 rounded-full hover:bg-emerald-50 transition-all duration-300 text-[18px]"
+                                className="text-gray-700 font-semibold px-4 py-1.5 rounded-full hover:bg-emerald-50 transition-all duration-300 text-[15px]"
                             >
                                 Sign In
                             </button>
                             <button 
                                 onClick={handleSignupClick} 
-                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 text-[18px]"
+                                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold px-5 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 text-[15px]"
                             >
                                 Start for Free
                             </button>
                         </div>
+
+                        {/* Mobile Menu Button */}
+                        <button 
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="lg:hidden p-2 text-gray-700 hover:text-emerald-600 transition-colors"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {mobileMenuOpen ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                )}
+                            </svg>
+                        </button>
                     </div>
+
+                    {/* Mobile Menu */}
+                    {mobileMenuOpen && (
+                        <div className="lg:hidden mt-2 bg-white/95 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 overflow-hidden">
+                            <nav className="flex flex-col p-4 space-y-3">
+                                <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-base py-2">Features</a>
+                                <a href="#benefits" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-base py-2">Benefits</a>
+                                <a href="#" onClick={() => setMobileMenuOpen(false)} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-base py-2">Product</a>
+                                <a href="#footer" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.getElementById('footer').scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-base py-2 cursor-pointer">Contact</a>
+                                <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
+                                    <button 
+                                        onClick={() => { handleLoginClick(); setMobileMenuOpen(false); }}
+                                        className="text-gray-700 font-semibold px-4 py-2 rounded-full hover:bg-emerald-50 transition-all duration-300 text-base"
+                                    >
+                                        Sign In
+                                    </button>
+                                    <button 
+                                        onClick={() => { handleSignupClick(); setMobileMenuOpen(false); }}
+                                        className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 text-base"
+                                    >
+                                        Start for Free
+                                    </button>
+                                </div>
+                            </nav>
+                        </div>
+                    )}
                 </div>
             </header>
 
             {/* Hero Section - Unique Design with Video */}
-            <main className="relative min-h-screen flex items-center overflow-hidden pt-12">
+            <main className="relative min-h-screen flex items-center overflow-hidden pt-16 sm:pt-20">
                 {/* Background with Image/Video */}
                 <div className="absolute inset-0 z-0">
                     {/* Background Image */}
@@ -182,29 +223,29 @@ const LandingPage = () => {
                 </div>
                 
                 {/* Content - Asymmetric Layout */}
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 py-20">
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 py-12 sm:py-16 lg:py-20">
                     <div className="grid lg:grid-cols-12 gap-8 items-center">
                         {/* Left Content - Takes more space */}
                         <div className="lg:col-span-7 text-left">
                             {/* Animated badge */}
-                            <div className={`inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-md border border-emerald-400/30 rounded-full px-4 py-2 mb-6 transition-all duration-700 delay-100 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                            <div className={`inline-flex items-center gap-2 bg-emerald-500/20 backdrop-blur-md border border-emerald-400/30 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6 transition-all duration-700 delay-100 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                                <span className="text-emerald-100 text-sm font-medium">Blockchain-Powered Transparency</span>
+                                <span className="text-emerald-100 text-xs sm:text-sm font-medium">Blockchain-Powered Transparency</span>
                             </div>
 
-                            <h1 className={`text-5xl lg:text-8xl font-black text-white mb-6 leading-[1.1] transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                            <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-black text-white mb-4 sm:mb-6 leading-[1.1] transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 Freshness You<br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Can Trust.</span>
                             </h1>
                             
-                            <p className={`text-xl lg:text-2xl text-gray-200 mb-8 leading-relaxed max-w-2xl transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                            <p className={`text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-6 sm:mb-8 leading-relaxed max-w-2xl transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 Leveraging blockchain to bring unparalleled transparency to perishable food supply chains. Reduce spoilage, prevent losses, from farm to fork.
                             </p>
                             
-                            <div className={`flex flex-col sm:flex-row gap-4 mb-12 transition-all duration-700 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                            <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12 transition-all duration-700 delay-600 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 <button
                                     onClick={() => navigate('/verify')}
-                                    className="group bg-emerald-500 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl hover:bg-emerald-600 transition-all duration-300 transform hover:scale-105 text-lg flex items-center justify-center gap-2"
+                                    className="group bg-emerald-500 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-2xl hover:bg-emerald-600 transition-all duration-300 transform hover:scale-105 text-base sm:text-lg flex items-center justify-center gap-2"
                                 >
                                     <span>Scan a Product</span>
                                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,18 +255,18 @@ const LandingPage = () => {
                             </div>
 
                             {/* Stats Row */}
-                            <div className={`grid grid-cols-3 gap-6 transition-all duration-700 delay-800 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
-                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                                    <p className="text-3xl font-bold text-white mb-1">10K+</p>
-                                    <p className="text-sm text-gray-300">Products Tracked</p>
+                            <div className={`grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6 transition-all duration-700 delay-800 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                <div className="bg-white/10 backdrop-blur-md rounded-lg sm:rounded-2xl p-2 sm:p-3 lg:p-4 border border-white/20">
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 sm:mb-1">10K+</p>
+                                    <p className="text-xs sm:text-sm text-gray-300">Products Tracked</p>
                                 </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                                    <p className="text-3xl font-bold text-white mb-1">50+</p>
-                                    <p className="text-sm text-gray-300">Partners</p>
+                                <div className="bg-white/10 backdrop-blur-md rounded-lg sm:rounded-2xl p-2 sm:p-3 lg:p-4 border border-white/20">
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 sm:mb-1">50+</p>
+                                    <p className="text-xs sm:text-sm text-gray-300">Partners</p>
                                 </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-                                    <p className="text-3xl font-bold text-white mb-1">99.9%</p>
-                                    <p className="text-sm text-gray-300">Accurate</p>
+                                <div className="bg-white/10 backdrop-blur-md rounded-lg sm:rounded-2xl p-2 sm:p-3 lg:p-4 border border-white/20">
+                                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 sm:mb-1">99.9%</p>
+                                    <p className="text-xs sm:text-sm text-gray-300">Accurate</p>
                                 </div>
                             </div>
                         </div>
@@ -279,19 +320,19 @@ const LandingPage = () => {
             </main>
 
             {/* Features Section - Animated Icon Grid */}
-            <section id="features" ref={featuresRef} className="py-20 bg-gradient-to-b from-white to-emerald-50/30">
+            <section id="features" ref={featuresRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-emerald-50/30">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className={`text-center mb-16 transition-all duration-700 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">The Future of Fresh<br />Food Integrity</h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            Hover over each feature to discover how we're revolutionizing food transparency
+                    <div className={`text-center mb-10 sm:mb-12 lg:mb-16 transition-all duration-700 ${featuresVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">The Future of Fresh<br />Food Integrity</h2>
+                        <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
+                            Tap or hover over each feature to discover how we're revolutionizing food transparency
                         </p>
                     </div>
 
                     {/* Animated Icon Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                         {/* Feature 1 - Blockchain */}
-                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        <div className={`group relative bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[280px] sm:min-h-[320px] border border-gray-100 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
                             {/* Icon State - Default */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
                                 <div className="w-28 h-28 bg-teal-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
@@ -319,7 +360,7 @@ const LandingPage = () => {
                         </div>
 
                         {/* Feature 2 - Geo-Tagged */}
-                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 delay-100 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        <div className={`group relative bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[280px] sm:min-h-[320px] border border-gray-100 delay-100 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
                             {/* Icon State - Default */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
                                 <div className="w-28 h-28 bg-amber-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
@@ -347,7 +388,7 @@ const LandingPage = () => {
                         </div>
 
                         {/* Feature 3 - Smart Contract */}
-                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 delay-200 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        <div className={`group relative bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[280px] sm:min-h-[320px] border border-gray-100 delay-200 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
                             {/* Icon State - Default */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
                                 <div className="w-28 h-28 bg-blue-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
@@ -375,7 +416,7 @@ const LandingPage = () => {
                         </div>
 
                         {/* Feature 4 - Post-Harvest */}
-                        <div className={`group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[320px] border border-gray-100 delay-300 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        <div className={`group relative bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden min-h-[280px] sm:min-h-[320px] border border-gray-100 delay-300 ${featuresVisible ? 'opacity-100' : 'opacity-0'}`}>
                             {/* Icon State - Default */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center p-6 transition-all duration-500 group-hover:opacity-0 group-hover:scale-50">
                                 <div className="w-28 h-28 bg-purple-50 rounded-3xl flex items-center justify-center mb-6 transition-transform duration-500">
@@ -417,16 +458,16 @@ const LandingPage = () => {
             </section>
 
             {/* Benefits Section - New */}
-            <section id="benefits" ref={benefitsRef} className="py-20 bg-gradient-to-b from-emerald-50 to-white">
+            <section id="benefits" ref={benefitsRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-emerald-50 to-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className={`text-center mb-16 transition-all duration-700 ${benefitsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Transform Your Perishable<br />Supply Chain Today</h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <div className={`text-center mb-10 sm:mb-12 lg:mb-16 transition-all duration-700 ${benefitsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">Transform Your Perishable<br />Supply Chain Today</h2>
+                        <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto px-4">
                             Join leading food processors and distributors in the freshness revolution
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                         {/* Benefit 1 */}
                         <div className={`bg-white rounded-2xl p-8 shadow-lg border border-emerald-100 transition-all duration-500 hover:shadow-xl hover:-translate-y-1 ${benefitsVisible ? 'opacity-100' : 'opacity-0'}`}>
                             <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -465,56 +506,56 @@ const LandingPage = () => {
 
 
             {/* Enhanced CTA Section */}
-            <section id="get-started" ref={ctaRef} className="py-24 bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 relative overflow-hidden">
+            <section id="get-started" ref={ctaRef} className="py-12 sm:py-16 lg:py-24 bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 relative overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1920&h=1080&fit=crop')] bg-cover bg-center"></div>
                 </div>
                 
                 <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center transition-all duration-1000 ${ctaVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">Start Your Journey<br />Towards a Healthier Future</h2>
-                    <p className="text-xl md:text-2xl text-emerald-50 mb-12 max-w-3xl mx-auto leading-relaxed">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-4 sm:mb-6">Start Your Journey<br />Towards a Healthier Future</h2>
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-emerald-50 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed px-4">
                         Join thousands of farmers, distributors, and consumers building a transparent food ecosystem.
                     </p>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-10 sm:mb-16">
                         <button
                             onClick={handleSignupClick}
-                            className="bg-white text-emerald-600 font-bold px-10 py-5 rounded-full shadow-2xl hover:bg-amber-50 transition-all duration-300 transform hover:scale-110 text-lg"
+                            className="w-full sm:w-auto bg-white text-emerald-600 font-bold px-8 sm:px-10 py-4 sm:py-5 rounded-full shadow-2xl hover:bg-amber-50 transition-all duration-300 transform hover:scale-110 text-base sm:text-lg"
                         >
                             Verify a Product
                         </button>
                         <button
                             onClick={() => navigate('/verify')}
-                            className="bg-transparent border-2 border-white text-white font-bold px-10 py-5 rounded-full hover:bg-white hover:text-emerald-600 transition-all duration-300 transform hover:scale-110 text-lg"
+                            className="w-full sm:w-auto bg-transparent border-2 border-white text-white font-bold px-8 sm:px-10 py-4 sm:py-5 rounded-full hover:bg-white hover:text-emerald-600 transition-all duration-300 transform hover:scale-110 text-base sm:text-lg"
                         >
                             Learn More
                         </button>
                     </div>
 
                     {/* Stats or Trust Indicators */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                            <p className="text-4xl font-bold text-white mb-2">10,000+</p>
-                            <p className="text-emerald-50">Products Tracked</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20">
+                            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">10,000+</p>
+                            <p className="text-sm sm:text-base text-emerald-50">Products Tracked</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                            <p className="text-4xl font-bold text-white mb-2">50+</p>
-                            <p className="text-emerald-50">Partner Organizations</p>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20">
+                            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">50+</p>
+                            <p className="text-sm sm:text-base text-emerald-50">Partner Organizations</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                            <p className="text-4xl font-bold text-white mb-2">99.9%</p>
-                            <p className="text-emerald-50">Data Accuracy</p>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/20">
+                            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">99.9%</p>
+                            <p className="text-sm sm:text-base text-emerald-50">Data Accuracy</p>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer id="footer" className="bg-gray-900 text-white py-12">
+            <footer id="footer" className="bg-gray-900 text-white py-8 sm:py-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
                         {/* Company Info */}
                         <div className="col-span-1">
                             <AyuTraceLogo size="medium" showText={false} />
